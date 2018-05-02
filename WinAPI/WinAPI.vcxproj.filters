@@ -37,6 +37,9 @@
     <Filter Include="SaveFile">
       <UniqueIdentifier>{00ce1dc5-6825-424a-bc36-d5cbe091fea5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GameMain\Simtown">
+      <UniqueIdentifier>{79833f81-caf9-48e9-885a-fefa85026766}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -108,6 +111,12 @@
     <ClInclude Include="RandomFunction.h">
       <Filter>GameFrameWork\Util</Filter>
     </ClInclude>
+    <ClInclude Include="IsoTile.h">
+      <Filter>GameMain\Simtown</Filter>
+    </ClInclude>
+    <ClInclude Include="Simtown.h">
+      <Filter>GameMain\Simtown</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -163,6 +172,9 @@
     </ClCompile>
     <ClCompile Include="Object.cpp">
       <Filter>GameFrameWork\Util</Filter>
+    </ClCompile>
+    <ClCompile Include="Simtown.cpp">
+      <Filter>GameMain\Simtown</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

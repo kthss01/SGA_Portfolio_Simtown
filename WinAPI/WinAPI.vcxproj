@@ -154,6 +154,7 @@
     <ClInclude Include="Image.h" />
     <ClInclude Include="ImageManager.h" />
     <ClInclude Include="IniData.h" />
+    <ClInclude Include="IsoTile.h" />
     <ClInclude Include="KeyManager.h" />
     <ClInclude Include="MainGame.h" />
     <ClInclude Include="Object.h" />
@@ -161,6 +162,7 @@
     <ClInclude Include="RandomFunction.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="SceneManager.h" />
+    <ClInclude Include="Simtown.h" />
     <ClInclude Include="SIngletonBase.h" />
     <ClInclude Include="SoundManager.h" />
     <ClInclude Include="stdafx.h" />
@@ -183,6 +185,7 @@
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="ProgressBar.cpp" />
     <ClCompile Include="SceneManager.cpp" />
+    <ClCompile Include="Simtown.cpp" />
     <ClCompile Include="SoundManager.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
