@@ -76,15 +76,18 @@ void Program::Render()
 	D2D::GetDevice()->SetIndices(this->ib);
 
 
-	D2D::GetDevice()->SetTexture(0, pTex[1]);
-	D2D::GetDevice()->DrawIndexedPrimitive(
-		D3DPT_TRIANGLELIST, // 그릴 도형
-		0,	// 시작 vertex 배열 인덱스
-		0,	// 최소 vertex 시작 번호
-		VERTEX_SIZE,	// 정점의 갯수
-		0,	// 시작 index 배열
-		INDEX_SIZE / 3	// 삼각형의 갯수
-	);
+	for (int i = 0; i < TILE_SIZE; i++) {
+		if (i >= POKEMON_SIZE) continue;
+		D2D::GetDevice()->SetTexture(0, pTex[i]);
+		D2D::GetDevice()->DrawIndexedPrimitive(
+			D3DPT_TRIANGLELIST, // 그릴 도형
+			0,	// 시작 vertex 배열 인덱스
+			0,	// 최소 vertex 시작 번호
+			VERTEX_SIZE,	// 정점의 갯수
+			i * 6,	// 시작 index 배열
+			2	// 삼각형의 갯수
+		);
+	}
 
 	//for (int i = 0; i < (TILE_ROW - 1) * (TILE_COL - 1); i++) {
 	//	D2D::GetDevice()->SetTexture(0, pTex[i % 4]);
@@ -213,30 +216,22 @@ void Program::Init()
 	// win api에서 배운거랑 해서 해야함
 	// CreateFile() // 파일 자체를 불러와서 texture 만들어서 해야됨  
 	// 파일상에서 불러와서 만들어주는거 
-	hr = D3DXCreateTextureFromFile(
-		D2D::GetDevice(),
-		L"Textures/pokemon_1.png",
-		&pTex[0]
-	);
-	assert(SUCCEEDED(hr));
-	hr = D3DXCreateTextureFromFile(
-		D2D::GetDevice(),
-		L"Textures/pokemon_2.png",
-		&pTex[1]
-	);
-	assert(SUCCEEDED(hr));
-	hr = D3DXCreateTextureFromFile(
-		D2D::GetDevice(),
-		L"Textures/pokemon_3.png",
-		&pTex[2]
-	);
-	assert(SUCCEEDED(hr));
-	hr = D3DXCreateTextureFromFile(
-		D2D::GetDevice(),
-		L"Textures/pokemon_4.png",
-		&pTex[3]
-	);
-	assert(SUCCEEDED(hr));
+
+	for (int i = 0; i < POKEMON_SIZE; i++) {
+		wstring temp;
+		temp = L"Textures/pokemon/pokemon ";
+		temp += L"(";
+		temp += to_wstring(i + 1);
+		temp += L").png";
+
+		hr = D3DXCreateTextureFromFile(
+			D2D::GetDevice(),
+			temp.c_str(),
+			&pTex[i]
+		);
+		assert(SUCCEEDED(hr));
+	}
+
 	// 이미지에 대한 정보 필요하면 (ex가 확장임)
 	// 텍스처 파일에서 불러오는데 옵션을 추가해서 불러오겟다는거
 	// 이녀석 이용해서 마젠타 빼듯이 뺄 수 있음
