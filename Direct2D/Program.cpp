@@ -39,24 +39,9 @@ void Program::Update()
 
 	Util::GetMousePos(&mousePos);
 
-	//// check Collision
-	//Vector2 position[7];
+	Matrix matViewProj = matView * matProjection;
 
-	//Matrix matViewProj = matView * matProjection;
-
-	//for (int i = 0; i < 7; i++) {
-	//	// world view projection 곱해줘야함 근데 월드는 identity라 안곱해도 됨
-	//	position[i] = vertices[i].position.TransformCoord(matViewProj);
-	//}
-
-	//check = false;
-	//check |= Collision::IntersectTri(position[0], position[1], position[2], mousePos);
-	//check |= Collision::IntersectTri(position[0], position[2], position[3], mousePos);
-	//check |= Collision::IntersectTri(position[0], position[3], position[4], mousePos);
-	//check |= Collision::IntersectTri(position[0], position[4], position[5], mousePos);
-	//check |= Collision::IntersectTri(position[0], position[5], position[6], mousePos);
-	//check |= Collision::IntersectTri(position[0], position[6], position[1], mousePos);
-
+	TileCollision(matViewProj);
 }
 
 void Program::Render()
@@ -128,6 +113,16 @@ void Program::Init()
 			indices[count++] = i * TILE_COL + j + 1;
 			indices[count++] = (i + 1) * TILE_COL + j + 1;
 			indices[count++] = (i + 1) * TILE_COL + j;
+
+			mapTile[i][j].x = i;
+			mapTile[i][j].y = j;
+			mapTile[i][j].position[0] = vertices[i * TILE_COL + j].position;
+			mapTile[i][j].position[1] = vertices[i * TILE_COL + j + 1].position;
+			mapTile[i][j].position[2] = vertices[(i + 1) * TILE_COL + j].position;
+			mapTile[i][j].position[3] = vertices[i * TILE_COL + j + 1].position;
+			mapTile[i][j].position[4] = vertices[(i + 1) * TILE_COL + j + 1].position;
+			mapTile[i][j].position[5] = vertices[(i + 1) * TILE_COL + j].position;
+			mapTile[i][j].isSelected = false;
 		}
 	}
 
@@ -259,36 +254,87 @@ void Program::TextDraw()
 	);
 
 	rc.top += 20;
-	if (check) {
-		// 멀티바이트면 DrawTextA
-		font->DrawTextW(
-			// 이미지 2D 좌표에서 띄우는걸 sprite라고 함
-			NULL,
-			L"충돌",
-			-1,	// 전체 띄우려면 -1, 아니면 문자열 길이만큼 하면됨
-			&rc,
-			// DT_NOCLIP이 rc에 상관없이 출력하겠다는거
-			// 이거쓰면 rc의 10,10이 좌표 정도만 되는거
-			DT_LEFT | DT_NOCLIP, // 옵션, 왼쪽 정렬로 하겠다는거
-								 // 0x~~ 이거 귀찮으면 함수도 있음
-								 //D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f)
-			0xFFFF0000
-		);
+	//if (check) {
+	//	// 멀티바이트면 DrawTextA
+	//	font->DrawTextW(
+	//		// 이미지 2D 좌표에서 띄우는걸 sprite라고 함
+	//		NULL,
+	//		L"충돌",
+	//		-1,	// 전체 띄우려면 -1, 아니면 문자열 길이만큼 하면됨
+	//		&rc,
+	//		// DT_NOCLIP이 rc에 상관없이 출력하겠다는거
+	//		// 이거쓰면 rc의 10,10이 좌표 정도만 되는거
+	//		DT_LEFT | DT_NOCLIP, // 옵션, 왼쪽 정렬로 하겠다는거
+	//							 // 0x~~ 이거 귀찮으면 함수도 있음
+	//							 //D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f)
+	//		0xFFFF0000
+	//	);
+	//}
+	//else {
+	//	// 멀티바이트면 DrawTextA
+	//	font->DrawTextW(
+	//		// 이미지 2D 좌표에서 띄우는걸 sprite라고 함
+	//		NULL,
+	//		L"안충돌",
+	//		-1,	// 전체 띄우려면 -1, 아니면 문자열 길이만큼 하면됨
+	//		&rc,
+	//		// DT_NOCLIP이 rc에 상관없이 출력하겠다는거
+	//		// 이거쓰면 rc의 10,10이 좌표 정도만 되는거
+	//		DT_LEFT | DT_NOCLIP, // 옵션, 왼쪽 정렬로 하겠다는거
+	//							 // 0x~~ 이거 귀찮으면 함수도 있음
+	//							 //D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f)
+	//		0xFFFF0000
+	//	);
+	//}
+
+	for (int i = 0; i < TILE_ROW - 1; i++) {
+		for (int j = 0; j < TILE_COL - 1; j++) {
+			if (!mapTile[i][j].isSelected) continue;
+
+			wstring temp;
+			temp = L"(";
+			temp += to_wstring(mapTile[i][j].x);
+			temp += L",";
+			temp += to_wstring(mapTile[i][j].y);
+			temp += L")";
+
+			temp += L" 충돌";
+			// 멀티바이트면 DrawTextA
+			font->DrawTextW(
+				// 이미지 2D 좌표에서 띄우는걸 sprite라고 함
+				NULL,
+				temp.c_str(),
+				-1,	// 전체 띄우려면 -1, 아니면 문자열 길이만큼 하면됨
+				&rc,
+				// DT_NOCLIP이 rc에 상관없이 출력하겠다는거
+				// 이거쓰면 rc의 10,10이 좌표 정도만 되는거
+				DT_LEFT | DT_NOCLIP, // 옵션, 왼쪽 정렬로 하겠다는거
+										// 0x~~ 이거 귀찮으면 함수도 있음
+										//D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f)
+				0xFFFF0000
+			);
+		}
 	}
-	else {
-		// 멀티바이트면 DrawTextA
-		font->DrawTextW(
-			// 이미지 2D 좌표에서 띄우는걸 sprite라고 함
-			NULL,
-			L"안충돌",
-			-1,	// 전체 띄우려면 -1, 아니면 문자열 길이만큼 하면됨
-			&rc,
-			// DT_NOCLIP이 rc에 상관없이 출력하겠다는거
-			// 이거쓰면 rc의 10,10이 좌표 정도만 되는거
-			DT_LEFT | DT_NOCLIP, // 옵션, 왼쪽 정렬로 하겠다는거
-								 // 0x~~ 이거 귀찮으면 함수도 있음
-								 //D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f)
-			0xFFFF0000
-		);
+}
+
+void Program::TileCollision(Matrix& matViewProj)
+{
+	for (int i = 0; i < TILE_ROW - 1; i++) {
+		for (int j = 0; j < TILE_COL - 1; j++) {
+			Vector2 position[6];
+
+			for (int k = 0; k < 6; k++) {
+				position[k] = mapTile[i][j].position[k].TransformCoord(matViewProj);
+			}
+
+			bool check = false;
+
+			check |= Collision::IntersectTri(
+				position[0], position[1], position[2], mousePos);
+			check |= Collision::IntersectTri(
+				position[3], position[4], position[5], mousePos);
+
+			mapTile[i][j].isSelected = check;
+		}
 	}
 }

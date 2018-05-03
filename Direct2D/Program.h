@@ -2,6 +2,8 @@
 
 // MainGame대신 돌아갈꺼
 
+// vertex 10 x 10 이면 tile 9 x 9 타일 만들어짐
+
 #define TILE_ROW 10
 #define TILE_COL 10
 #define TILE_WIDTH 50
@@ -11,6 +13,13 @@
 #define INDEX_SIZE ((TILE_ROW - 1) * (TILE_COL - 1) * 2 * 3)
 
 #define D3DFVF_CUSTOMVERTEX (D3DFVF_XYZ | D3DFVF_TEX1)
+
+struct tagTile {
+	int x, y;
+	Vector2 position[6];
+
+	bool isSelected;
+};
 
 class Program
 {
@@ -43,6 +52,8 @@ private:
 
 	bool check;
 
+	tagTile mapTile[TILE_ROW - 1][TILE_COL - 1];
+	int tileX, tileY;
 public:
 	Program();
 	~Program();
@@ -52,5 +63,6 @@ public:
 
 	void Init();
 	void TextDraw();
+	void TileCollision(Matrix& matViewProj);
 };
 
