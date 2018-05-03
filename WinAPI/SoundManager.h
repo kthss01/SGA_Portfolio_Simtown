@@ -1,6 +1,6 @@
 #pragma once
 
-#include "SIngletonBase.h"
+#include "SingletonBase.h"
 // 헤더랑 cpp 합친거
 #include "./FMOD/inc/fmod.hpp"
 #pragma comment(lib, "./FMOD/lib/fmodex_vc.lib")

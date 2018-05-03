@@ -54,9 +54,6 @@
     <ClInclude Include="WinAPI.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="SIngletonBase.h">
-      <Filter>GameFrameWork\Manager</Filter>
-    </ClInclude>
     <ClInclude Include="Util.h">
       <Filter>GameFrameWork\Util</Filter>
     </ClInclude>
@@ -116,6 +113,9 @@
     </ClInclude>
     <ClInclude Include="Simtown.h">
       <Filter>GameMain\Simtown</Filter>
+    </ClInclude>
+    <ClInclude Include="SingletonBase.h">
+      <Filter>GameFrameWork\Manager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
