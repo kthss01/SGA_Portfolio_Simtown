@@ -9,6 +9,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Direct2D-사각형 타일 �
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Direct2D-다양한 텍스쳐 입히기", "Direct2D-다양한 텍스쳐 입히기\Direct2D-다양한 텍스쳐 입히기.vcxproj", "{84AA7BCA-8BD0-48E0-9E7B-4733D8D39531}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Direct2D-다양한 텍스쳐 입히기", "Direct2D-Manager 사용하기\Direct2D-Manager 사용하기.vcxproj", "{FCD46847-5A91-4380-9663-E8AC555CB5D3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -41,6 +43,14 @@ Global
 		{84AA7BCA-8BD0-48E0-9E7B-4733D8D39531}.Release|x64.Build.0 = Release|x64
 		{84AA7BCA-8BD0-48E0-9E7B-4733D8D39531}.Release|x86.ActiveCfg = Release|Win32
 		{84AA7BCA-8BD0-48E0-9E7B-4733D8D39531}.Release|x86.Build.0 = Release|Win32
+		{FCD46847-5A91-4380-9663-E8AC555CB5D3}.Debug|x64.ActiveCfg = Debug|x64
+		{FCD46847-5A91-4380-9663-E8AC555CB5D3}.Debug|x64.Build.0 = Debug|x64
+		{FCD46847-5A91-4380-9663-E8AC555CB5D3}.Debug|x86.ActiveCfg = Debug|Win32
+		{FCD46847-5A91-4380-9663-E8AC555CB5D3}.Debug|x86.Build.0 = Debug|Win32
+		{FCD46847-5A91-4380-9663-E8AC555CB5D3}.Release|x64.ActiveCfg = Release|x64
+		{FCD46847-5A91-4380-9663-E8AC555CB5D3}.Release|x64.Build.0 = Release|x64
+		{FCD46847-5A91-4380-9663-E8AC555CB5D3}.Release|x86.ActiveCfg = Release|Win32
+		{FCD46847-5A91-4380-9663-E8AC555CB5D3}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
