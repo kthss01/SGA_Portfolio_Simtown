@@ -42,12 +42,40 @@ void Program::Update()
 	matView = Matrix::View(vEye, vLookAt, vUp);
 	matProjection = Matrix::Ortho(0, WINSIZE_X, WINSIZE_Y, 0, 0.0, 1.0f);
 
-	if (GetKeyState(VK_UP) & 0x8000) { vEye.y += 1.0f; }
-	if (GetKeyState(VK_DOWN) & 0x8000) { vEye.y -= 1.0f; }
-
 	Util::GetMousePos(&mousePos);
 
 	Matrix matViewProj = matView * matProjection;
+
+	if (GetKeyState(VK_UP) & 0x8000) { vEye.y += 1.0f; }
+	if (GetKeyState(VK_DOWN) & 0x8000) { vEye.y -= 1.0f; }
+	if (GetKeyState(VK_LEFT) & 0x8000) { vEye.x += 1.0f; }
+	if (GetKeyState(VK_RIGHT) & 0x8000) { vEye.x -= 1.0f; }
+
+	if (GetKeyState(VK_LBUTTON) & 0x8000) {
+		for (int i = 0; i < TILE_ROW - 1; i++) {
+			for (int j = 0; j < TILE_COL - 1; j++) {
+				Vector2 position[6];
+
+				for (int k = 0; k < 6; k++) {
+					position[k] = mapTile[i][j].position[k].TransformCoord(matViewProj);
+				}
+
+				bool check = false;
+
+				check |= Collision::IntersectTri(
+					position[0], position[1], position[2], mousePos);
+				check |= Collision::IntersectTri(
+					position[3], position[4], position[5], mousePos);
+
+				if (check) {
+					mapTile[i][j].isClicked = true;
+					break;
+				}
+			}
+		}
+	}
+
+
 
 	TileCollision(matViewProj);
 }
@@ -78,6 +106,7 @@ void Program::Render()
 
 	for (int i = 0; i < TILE_SIZE; i++) {
 		if (i >= POKEMON_SIZE) continue;
+		if (mapTile[i / (TILE_COL - 1)][i % (TILE_COL - 1)].isClicked) continue;
 		D2D::GetDevice()->SetTexture(0, pTex[i]);
 		D2D::GetDevice()->DrawIndexedPrimitive(
 			D3DPT_TRIANGLELIST, // 그릴 도형
@@ -144,6 +173,7 @@ void Program::Init()
 			mapTile[i][j].position[4] = vertices[(i + 1) * TILE_COL + j + 1].position;
 			mapTile[i][j].position[5] = vertices[(i + 1) * TILE_COL + j].position;
 			mapTile[i][j].isSelected = false;
+			mapTile[i][j].isClicked = false;
 		}
 	}
 

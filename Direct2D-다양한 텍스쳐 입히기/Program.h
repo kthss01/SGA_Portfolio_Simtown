@@ -22,6 +22,7 @@ struct tagTile {
 	Vector2 position[6];
 
 	bool isSelected;
+	bool isClicked;
 };
 
 class Program
