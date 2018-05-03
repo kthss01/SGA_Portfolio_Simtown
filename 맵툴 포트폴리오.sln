@@ -5,7 +5,9 @@ VisualStudioVersion = 15.0.27428.2037
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WinAPI-Simtown", "WinAPI\WinAPI.vcxproj", "{6E2AE89B-D1E4-494F-B988-51CA9640CC53}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Direct2D-Simtown", "Direct2D\Direct2D.vcxproj", "{7E3B7E45-A685-4D27-A647-E52F4C6E1E30}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Direct2D-사각형 타일 그리기", "Direct2D-사각형 타일 그리기\Direct2D-사각형 타일 그리기.vcxproj", "{7E3B7E45-A685-4D27-A647-E52F4C6E1E30}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Direct2D-다양한 텍스쳐 입히기", "Direct2D-다양한 텍스쳐 입히기\Direct2D-다양한 텍스쳐 입히기.vcxproj", "{84AA7BCA-8BD0-48E0-9E7B-4733D8D39531}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -31,6 +33,14 @@ Global
 		{7E3B7E45-A685-4D27-A647-E52F4C6E1E30}.Release|x64.Build.0 = Release|x64
 		{7E3B7E45-A685-4D27-A647-E52F4C6E1E30}.Release|x86.ActiveCfg = Release|Win32
 		{7E3B7E45-A685-4D27-A647-E52F4C6E1E30}.Release|x86.Build.0 = Release|Win32
+		{84AA7BCA-8BD0-48E0-9E7B-4733D8D39531}.Debug|x64.ActiveCfg = Debug|x64
+		{84AA7BCA-8BD0-48E0-9E7B-4733D8D39531}.Debug|x64.Build.0 = Debug|x64
+		{84AA7BCA-8BD0-48E0-9E7B-4733D8D39531}.Debug|x86.ActiveCfg = Debug|Win32
+		{84AA7BCA-8BD0-48E0-9E7B-4733D8D39531}.Debug|x86.Build.0 = Debug|Win32
+		{84AA7BCA-8BD0-48E0-9E7B-4733D8D39531}.Release|x64.ActiveCfg = Release|x64
+		{84AA7BCA-8BD0-48E0-9E7B-4733D8D39531}.Release|x64.Build.0 = Release|x64
+		{84AA7BCA-8BD0-48E0-9E7B-4733D8D39531}.Release|x86.ActiveCfg = Release|Win32
+		{84AA7BCA-8BD0-48E0-9E7B-4733D8D39531}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

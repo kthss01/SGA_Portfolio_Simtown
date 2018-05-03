@@ -13,6 +13,14 @@ Program::Program()
 		FALSE
 	);
 
+	// 알파블렌딩 Enable True
+	D2D::GetDevice()->SetRenderState(
+		D3DRS_ALPHABLENDENABLE, TRUE);
+	D2D::GetDevice()->SetRenderState(
+		D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
+	D2D::GetDevice()->SetRenderState(
+		D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
+
 	vEye = Vector2(0, 0);	// 카메라의 위치
 }
 
@@ -66,7 +74,9 @@ void Program::Render()
 	// 버퍼 이용, 인덱스 이용 사각형 그리기
 	// 인덱스 정보도 디바이스에 넣어줘야함
 	D2D::GetDevice()->SetIndices(this->ib);
-	D2D::GetDevice()->SetTexture(0, pTex);
+
+
+	D2D::GetDevice()->SetTexture(0, pTex[1]);
 	D2D::GetDevice()->DrawIndexedPrimitive(
 		D3DPT_TRIANGLELIST, // 그릴 도형
 		0,	// 시작 vertex 배열 인덱스
@@ -75,6 +85,13 @@ void Program::Render()
 		0,	// 시작 index 배열
 		INDEX_SIZE / 3	// 삼각형의 갯수
 	);
+
+	//for (int i = 0; i < (TILE_ROW - 1) * (TILE_COL - 1); i++) {
+	//	D2D::GetDevice()->SetTexture(0, pTex[i % 4]);
+	//	D2D::GetDevice()->DrawIndexedPrimitive(
+	//		D3DPT_TRIANGLELIST,
+	//		i * 6, i * 6, 6, i * 3, 2);
+	//}
 
 	TextDraw();
 }
@@ -90,14 +107,15 @@ void Program::Init()
 					j * TILE_HEIGHT - (TILE_HEIGHT * (TILE_COL - 1)) / 2,
 					i * TILE_WIDTH - (TILE_WIDTH * (TILE_ROW - 1)) / 2);
 			//vertices[i * TILE_COL + j].color = 0xFFFF000;
-			if (i % 2 == 0 && j % 2 == 0)
-				vertices[i * TILE_COL + j].uv = Vector2(0, 0);
-			else if (i % 2 == 0 && j % 2 != 0)
-				vertices[i * TILE_COL + j].uv = Vector2(1, 0);
-			else if (i % 2 != 0 && j % 2 == 0)
-				vertices[i * TILE_COL + j].uv = Vector2(0, 1);
-			else
-				vertices[i * TILE_COL + j].uv = Vector2(1, 1);
+			//if (i % 2 == 0 && j % 2 == 0)
+			//	vertices[i * TILE_COL + j].uv = Vector2(0, 0);
+			//else if (i % 2 == 0 && j % 2 != 0)
+			//	vertices[i * TILE_COL + j].uv = Vector2(1, 0);
+			//else if (i % 2 != 0 && j % 2 == 0)
+			//	vertices[i * TILE_COL + j].uv = Vector2(0, 1);
+			//else
+			//	vertices[i * TILE_COL + j].uv = Vector2(1, 1);
+			vertices[i*TILE_COL + j].uv = Vector2(j, i);
 		}
 	}
 	
@@ -197,9 +215,28 @@ void Program::Init()
 	// 파일상에서 불러와서 만들어주는거 
 	hr = D3DXCreateTextureFromFile(
 		D2D::GetDevice(),
-		L"Textures/Box.png",
-		&pTex
+		L"Textures/pokemon_1.png",
+		&pTex[0]
 	);
+	assert(SUCCEEDED(hr));
+	hr = D3DXCreateTextureFromFile(
+		D2D::GetDevice(),
+		L"Textures/pokemon_2.png",
+		&pTex[1]
+	);
+	assert(SUCCEEDED(hr));
+	hr = D3DXCreateTextureFromFile(
+		D2D::GetDevice(),
+		L"Textures/pokemon_3.png",
+		&pTex[2]
+	);
+	assert(SUCCEEDED(hr));
+	hr = D3DXCreateTextureFromFile(
+		D2D::GetDevice(),
+		L"Textures/pokemon_4.png",
+		&pTex[3]
+	);
+	assert(SUCCEEDED(hr));
 	// 이미지에 대한 정보 필요하면 (ex가 확장임)
 	// 텍스처 파일에서 불러오는데 옵션을 추가해서 불러오겟다는거
 	// 이녀석 이용해서 마젠타 빼듯이 뺄 수 있음
