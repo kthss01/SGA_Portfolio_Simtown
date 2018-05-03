@@ -47,6 +47,8 @@ void Program::Update()
 	if (INPUT->GetKey(VK_LEFT)) { vEye.x += 1.0f; }
 	if (INPUT->GetKey(VK_RIGHT)) { vEye.x -= 1.0f; }
 
+	// 타일 모두 검사시 프레이 안나옴 100 * 100 사이즈 경우
+	// 검사만 안하면 100 * 100 이어도 60 프레임 나옴
 	if (INPUT->GetKeyDown(VK_LBUTTON)) {
 		for (int i = 0; i < TILE_ROW - 1; i++) {
 			for (int j = 0; j < TILE_COL - 1; j++) {
@@ -96,10 +98,14 @@ void Program::Render()
 	D2D::GetDevice()->SetIndices(this->ib);
 
 
+	//D2D::GetDevice()->SetTexture(0, pTex[0]);
+	//D2D::GetDevice()->DrawIndexedPrimitive(
+	//	D3DPT_TRIANGLELIST, 0, 0, VERTEX_SIZE, 0, INDEX_SIZE / 2);
+
 	for (int i = 0; i < TILE_SIZE; i++) {
 		if (i >= POKEMON_SIZE) continue;
 		if (mapTile[i / (TILE_COL - 1)][i % (TILE_COL - 1)].isClicked) continue;
-		D2D::GetDevice()->SetTexture(0, pTex[i]);
+		D2D::GetDevice()->SetTexture(0, pTex[i % POKEMON_SIZE]);
 		D2D::GetDevice()->DrawIndexedPrimitive(
 			D3DPT_TRIANGLELIST, // 그릴 도형
 			0,	// 시작 vertex 배열 인덱스
