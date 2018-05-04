@@ -1,0 +1,14 @@
+	_rcLeftUI[0] = RectMake(0, 0, 100, 50);
+	_rcLeftUI[1] = RectMake(0, 50, 100, 50);
+	_rcLeftUI[2] = RectMake(0, 100, 100, 50);
+	_rcLeftUI[3] = RectMake(0, 150, 100, 60);
+	_rcLeftUI[4] = RectMake(0, 210, 100, 50);
+	_rcLeftUI[5] = RectMake(0, 260, 100, 50);
+	_rcLeftUI[6] = RectMake(0, 310, 100, 50);
+	_rcLeftUI[7] = RectMake(0, 360, 100, 35);
+	_rcLeftUI[8] = RectMake(0, 395, 100, 35);
+	_rcLeftUI[9] = RectMake(0, 430, 100, 45);
+	_rcLeftUI[10] = RectMake(0, 475, 100, 70);
+	_rcLeftUI[11] = RectMake(0, 545, 100, 35);
+	_rcLeftUI[12] = RectMake(0, 580, 100, 50);
+	_rcLeftUI[13] = RectMake(0, 630, 100, 70);							

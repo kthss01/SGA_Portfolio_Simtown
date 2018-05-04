@@ -21,4 +21,5 @@ public:
 	void LoadSimtownImg();
 	void LoadTile();
 	void LoadBuilding();
+	void LoadUI();
 };

@@ -88,6 +88,7 @@ void MainGame::LoadSimtownImg()
 {
 	LoadTile();
 	LoadBuilding();
+	LoadUI();
 }
 
 void MainGame::LoadTile()
@@ -98,4 +99,22 @@ void MainGame::LoadTile()
 
 void MainGame::LoadBuilding()
 {
+}
+
+void MainGame::LoadUI()
+{
+	IMAGE->AddImage("ui_left", "images/ui/ui_left.bmp", 0, 0,
+		100 * 11 * 3, 700, 33, 1, false, RGB(255, 0, 255));
+	IMAGE->AddImage("ui_bottom_1", "images/ui/ui_bottom_1.bmp", 0, 0,
+		100 * 2, 100 * 21, 2, 21, false, RGB(255, 0, 255));
+	IMAGE->AddImage("ui_bottom_2", "images/ui/ui_bottom_2.bmp", 0, 0,
+		100 * 2, 100 * 14, 2, 14, false, RGB(255, 0, 255));
+	IMAGE->AddImage("ui_bottom_3", "images/ui/ui_bottom_3.bmp", 0, 0,
+		100 * 2, 100 * 14, 2, 14, false, RGB(255, 0, 255));
+	IMAGE->AddImage("ui_bottom_4", "images/ui/ui_bottom_4.bmp", 0, 0,
+		100 * 2, 100 * 7, 2, 7, false, RGB(255, 0, 255));
+	IMAGE->AddImage("ui_bottom_5", "images/ui/ui_bottom_5.bmp", 0, 0,
+		100 * 2, 100 * 7, 2, 7, false, RGB(255, 0, 255));
+	IMAGE->AddImage("ui_blank", "images/ui/ui_blank.bmp", 0, 0, 
+		100, 100, false, RGB(255, 0, 255));
 }

@@ -47,13 +47,13 @@ void TimeManager::Render(HDC hdc)
 #ifdef _DEBUG
 	if (_frame != NULL) {
 		sprintf_s(str, "FPS : %d", _frame->GetFrameRate());
-		TextOut(hdc, 0, 0, str, strlen(str));
+		TextOut(hdc, WINSIZEX - 300, 40, str, strlen(str));
 
 		sprintf_s(str, "worldTime : %f", _frame->GetWorldTime());
-		TextOut(hdc, 0, 20, str, strlen(str));
+		TextOut(hdc, WINSIZEX - 300, 60, str, strlen(str));
 
 		sprintf_s(str, "ElapsedTime : %f", _frame->GetElapsedTime());
-		TextOut(hdc, 0, 40, str, strlen(str));
+		TextOut(hdc, WINSIZEX - 300, 80, str, strlen(str));
 	}
 #else
 	if (_frame != NULL) {

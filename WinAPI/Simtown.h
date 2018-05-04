@@ -22,6 +22,27 @@ private:
 
 	float cell_width, cell_height;
 	float radius_width, radius_height;
+
+	RECT _rcLeftUI[14];
+	Image * _leftUI;
+	int _selectLeftUI;
+
+	RECT _rcTopUI;
+	Image * _topUI;
+
+	RECT _rcBottomUI[9];
+	Image * _bottomUI[5];
+	int _selectBottomUI;
+
+	Image *_blankUI;
+
+	RECT _rcDebug;
+	int _tileCnt;
+
+	RECT _rcPageUpUI;
+	RECT _rcPageDownUI;
+
+	bool _pageNum;
 public:
 	Simtown();
 	~Simtown();
@@ -31,10 +52,14 @@ public:
 	void Update();
 	void Render();
 
+	void CheckSize();
+
 	void FindImg();
 	void DrawTileMap();
 	void DrawRhombus(float left, float top);
 	int GetCornerIndex(int isoX, int isoY);
 	bool IsInRhombus(int corner, int isoX, int isoY);
+
+	void DrawUI();
 };
 

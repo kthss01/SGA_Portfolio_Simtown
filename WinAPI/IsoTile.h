@@ -19,8 +19,8 @@
 #define RADIUS_HEIGHT3 (CELL_HEIGHT3 / 2)
 
 // ÃÊ±â ÁÂÇ¥
-#define INIT_X 400
-#define INIT_Y 20
+#define INIT_X 555
+#define INIT_Y -330
 
 #define TILE_COUNT_X 1000
 #define TILE_COUNT_Y 1000
