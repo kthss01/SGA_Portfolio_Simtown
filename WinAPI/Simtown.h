@@ -18,7 +18,7 @@ private:
 
 	Image * _land;
 
-	int _selectNum;
+	int _selectSize;
 
 	float cell_width, cell_height;
 	float radius_width, radius_height;
@@ -42,7 +42,23 @@ private:
 	RECT _rcPageUpUI;
 	RECT _rcPageDownUI;
 
-	bool _pageNum;
+	int _pageNum;
+
+	Image * _pageUpUI1;
+	Image * _pageUpUI2;
+	Image * _pageDownUI1;
+	Image * _pageDownUI2;
+
+	RECT _rcToolBarUI[3];
+	RECT _rcSongUI[3];
+	Image * _toolBarUI;
+	Image * _songUI;
+
+	RECT _rcTownNameUI;
+	RECT _rcPopulationUI[2];
+
+	Image * _populationUI;
+	HFONT hfont;
 public:
 	Simtown();
 	~Simtown();

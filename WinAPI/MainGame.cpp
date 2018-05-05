@@ -117,4 +117,18 @@ void MainGame::LoadUI()
 		100 * 2, 100 * 7, 2, 7, false, RGB(255, 0, 255));
 	IMAGE->AddImage("ui_blank", "images/ui/ui_blank.bmp", 0, 0, 
 		100, 100, false, RGB(255, 0, 255));
+	IMAGE->AddImage("ui_click_up1", "images/ui/ui_click_up_1.bmp", 0, 0,
+		40, 40, false, RGB(255, 0, 255));
+	IMAGE->AddImage("ui_click_up2", "images/ui/ui_click_up_2.bmp", 0, 0,
+		40, 40, false, RGB(255, 0, 255));
+	IMAGE->AddImage("ui_click_down1", "images/ui/ui_click_down_1.bmp", 0, 0,
+		40, 40, false, RGB(255, 0, 255));
+	IMAGE->AddImage("ui_click_down2", "images/ui/ui_click_down_2.bmp", 0, 0,
+		40, 40, false, RGB(255, 0, 255));
+	IMAGE->AddImage("ui_toolBar", "images/ui/toolbar_3x1.bmp", 0, 0,
+		50 * 3, 25, 3, 1, true, RGB(255, 0, 255));
+	IMAGE->AddImage("ui_song", "images/ui/song_3x1.bmp", 0, 0,
+		50 * 3, 25, 3, 1, true, RGB(255, 0, 255));
+	IMAGE->AddImage("ui_population", "images/ui/ui_population.bmp", 0, 0,
+		150 * 3, 35, 3, 1, false, RGB(255, 0, 255));
 }
