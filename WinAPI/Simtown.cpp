@@ -25,62 +25,23 @@ HRESULT Simtown::Init()
 
 	FindImg();
 
-	_selectSize = 0;
+	_tileSize = TILESIZE_BIG;
 
 	cell_width = CELL_WIDTH;
 	cell_height = CELL_HEIGHT;
 	radius_width = RADIUS_WIDTH;
 	radius_height = RADIUS_HEIGHT;
 
-	_rcTopUI = RectMake(100, 0, WINSIZEX, 35);
-
-	_selectLeftUI = 0;
-
-	//for (int i = 0; i < 13; i++) {
-	//	_rcLeftUI[i] = RectMake(0, i * 50, 100, 50);
-	//}
-	//_rcLeftUI[13] = RectMake(0, 650, 100, 100);
-	_rcLeftUI[0] = RectMake(0, 0, 100, 50);
-	_rcLeftUI[1] = RectMake(0, 50, 100, 50);
-	_rcLeftUI[2] = RectMake(0, 100, 100, 50);
-	_rcLeftUI[3] = RectMake(0, 150, 100, 60);
-	_rcLeftUI[4] = RectMake(0, 210, 100, 50);
-	_rcLeftUI[5] = RectMake(0, 260, 100, 50);
-	_rcLeftUI[6] = RectMake(0, 310, 100, 50);
-	_rcLeftUI[7] = RectMake(0, 360, 100, 35);
-	_rcLeftUI[8] = RectMake(0, 395, 100, 35);
-	_rcLeftUI[9] = RectMake(0, 430, 100, 45);
-	_rcLeftUI[10] = RectMake(0, 475, 100, 70);
-	_rcLeftUI[11] = RectMake(0, 545, 100, 35);
-	_rcLeftUI[12] = RectMake(0, 580, 100, 50);
-	_rcLeftUI[13] = RectMake(0, 630, 100, 70);
-	
-	_rcBottomUI[0] = RectMake(100, WINSIZEY - 100, 300, 100);
-	for (int i = 1; i < 9; i++) {
-		_rcBottomUI[i] = RectMake(100 * i + 300, WINSIZEY - 100, 100, 100);
-	}
-	_selectBottomUI = 0;
-
-	_rcDebug = RectMake(WINSIZEX - 320, 40, 320, 300);
-
-	_pageNum = 0;
-
-	_rcPageUpUI = RectMake(
-		_rcBottomUI[8].left + 30, _rcBottomUI[8].top + 10, 40, 40);
-	_rcPageDownUI = RectMake(
-		_rcBottomUI[8].left + 30, _rcBottomUI[8].top + 50, 40, 40);
-
-	for (int i = 0; i < 3; i++) {
-		_rcToolBarUI[i] = RectMake(i * 75 + 110, 5, 50, 25);
+	for (int i = 0; i < TILE_COUNT_X; i++) {
+		for (int j = 0; j < TILE_COUNT_Y; j++) {
+			_tileMap[i][j].isSelected = false;
+			_tileMap[i][j].isStartDraw = false;
+		}
 	}
 
-	for (int i = 3; i < 6; i++) {
-		_rcSongUI[i-3] = RectMake(i * 75 + 110, 5, 50, 25);
-	}
+	UIInit();
 
-	_rcTownNameUI = RectMake(560, 5, 200, 25);
-	_rcPopulationUI[0] = RectMake(780, 5, 150, 25);
-	_rcPopulationUI[1] = RectMake(950, 0, 150, 35);
+	_isClicked = false;
 
 	return S_OK;
 }
@@ -96,16 +57,55 @@ void Simtown::Update()
 	if (INPUT->GetKey('A')) { _startX += 5; }
 	if (INPUT->GetKey('D')) { _startX -= 5; }
 
-	if (INPUT->GetKey('1')) { 
-		_selectSize = 0; 
+	if (INPUT->GetKey('1')) {
+		switch (_tileSize)
+		{
+		case TILESIZE_SMALL:
+			_startX -= 80;
+			_startY -= 495;
+			break;
+		case TILESIZE_MID:
+			_startX -= 50;
+			_startY -= 330;
+			break;
+		case TILESIZE_BIG:
+			break;
+		}
+		_tileSize = TILESIZE_BIG; 
 		CheckSize(); 
 	}
 	if (INPUT->GetKey('2')) { 
-		_selectSize = 1; 
+		switch (_tileSize)
+		{
+		case TILESIZE_SMALL:
+			_startX -= 30;
+			_startY -= 165;
+			break;
+		case TILESIZE_MID:
+			break;
+		case TILESIZE_BIG:
+			_startX += 50;
+			_startY += 330;
+			break;
+		}
+		_tileSize = TILESIZE_MID; 
 		CheckSize(); 
 	}
 	if (INPUT->GetKey('3')) { 
-		_selectSize = 2; 
+		switch (_tileSize)
+		{
+		case TILESIZE_SMALL:
+			break;
+		case TILESIZE_MID:
+			_startX += 30;
+			_startY += 165;
+			break;
+		case TILESIZE_BIG:
+			_startX += 80;
+			_startY += 495;
+			break;
+		}
+		_tileSize = TILESIZE_SMALL; 
 		CheckSize(); 
 	}
 	if (INPUT->GetKey('Z')) {
@@ -113,12 +113,34 @@ void Simtown::Update()
 		cell_height -= 1.0f;
 		radius_width = cell_width / 2;
 		radius_height = cell_height / 2;
+
+		_startY += 6;
+
+		if (cell_width > CELL_WIDTH2 + 24) {
+			_tileSize = TILESIZE_BIG;
+		}
+		else if (cell_width > CELL_WIDTH3) {
+			_tileSize = TILESIZE_MID;
+		}
+		else
+			_tileSize = TILESIZE_SMALL;
 	}
 	if (INPUT->GetKey('X')) {
 		cell_width += 2.0f;
 		cell_height += 1.0f;
 		radius_width = cell_width / 2;
 		radius_height = cell_height / 2;
+
+		_startY -= 6;
+
+		if (cell_width > CELL_WIDTH2 + 24) {
+			_tileSize = TILESIZE_BIG;
+		}
+		else if (cell_width > CELL_WIDTH3) {
+			_tileSize = TILESIZE_MID;
+		}
+		else
+			_tileSize = TILESIZE_SMALL;
 	}
 
 	if (INPUT->GetKeyDown(VK_TAB)) {
@@ -127,7 +149,8 @@ void Simtown::Update()
 
 	if (INPUT->GetKey(VK_LBUTTON)) {
 		// tile Select
-		{
+		if(g_ptMouse.x > 100 
+			&& g_ptMouse.y > 35 && g_ptMouse.y < WINSIZEY - 100) {
 			float cellX = (float)(g_ptMouse.x - _startX);
 
 			if (cellX < 0) {
@@ -170,11 +193,20 @@ void Simtown::Update()
 				if (isoX >= 0 && isoX < TILE_COUNT_X &&
 					isoY >= 0 && isoY < TILE_COUNT_Y) {
 
-					_tileMap[isoX][isoY].isSelected = true;
-
 					_center = corner;
 					_isoX = isoX;
 					_isoY = isoY;
+
+					if (_ui._selectLeftUI == 5 && _tileMap[isoX][isoY].isStartDraw) {
+						_tileMap[isoX][isoY].isStartDraw = false;
+						DeleteTile();
+					}
+
+					if (!_tileMap[isoX][isoY].isSelected && _isClicked) {
+						_tileMap[isoX][isoY].isStartDraw = true;
+						SelectTile();
+						//_tileMap[isoX][isoY].isSelected = true;
+					}
 				}
 			}
 		}
@@ -185,18 +217,25 @@ void Simtown::Update()
 		{
 			// left ui
 			for (int i = 0; i < 14; i++) {
-				if (PtInRect(&_rcLeftUI[i], g_ptMouse)) {
+				if (PtInRect(&_ui._rcLeftUI[i], g_ptMouse)) {
 					if (i == 7 || i == 8 || i == 9) {
-						_selectSize = i - 7;
+						_tileSize = (TileSize)(i - 7);
 						CheckSize();
 					}
 					else if (i > 9) {
-						_selectLeftUI = i - 3;
-						_pageNum = 0;
+						_ui._selectLeftUI = i - 3;
+						_ui._pageNum = 0;
+						_ui._selectBottomUI = 0;
 					}
 					else {
-						_selectLeftUI = i;
-						_pageNum = 0;
+						_ui._selectLeftUI = i;
+						_ui._pageNum = 0;
+						_ui._selectBottomUI = 0;
+
+						if (i < 5) {
+							_currentTileKind = (TileKind)i;
+							_currentTileNum = 0;
+						}
 					}
 					break;
 				}
@@ -204,64 +243,127 @@ void Simtown::Update()
 
 			// bottom ui
 			for (int i = 1; i < 8; i++) {
-				if (PtInRect(&_rcBottomUI[i], g_ptMouse)) {
-					_selectBottomUI = i - 1;
+				if (PtInRect(&_ui._rcBottomUI[i], g_ptMouse)) {
+					_ui._selectBottomUI = i - 1;
+					_currentTileNum = i - 1 + (_ui._pageNum * 7);
 					break;
 				}
 			}
 
 			// page ui
-			if (PtInRect(&_rcPageDownUI, g_ptMouse)) {
-				if (_selectLeftUI == 0 || _selectLeftUI == 1 || _selectLeftUI == 2) {
-					if (_selectLeftUI == 0 && _pageNum <= 1)
-						_pageNum++;
-					else if (_pageNum <= 0)
-						_pageNum++;
+			if (PtInRect(&_ui._rcPageDownUI, g_ptMouse)) {
+				if (_ui._selectLeftUI == 0 || _ui._selectLeftUI == 1 || _ui._selectLeftUI == 2) {
+					if (_ui._selectLeftUI == 0 && _ui._pageNum <= 1)
+						_ui._pageNum++;
+					else if (_ui._pageNum <= 0)
+						_ui._pageNum++;
 				}
 			}
-			if (PtInRect(&_rcPageUpUI, g_ptMouse)) {
-				if (_selectLeftUI == 0 || _selectLeftUI == 1 || _selectLeftUI == 2) {
-					if (_pageNum >= 1)
-						_pageNum--;
+			if (PtInRect(&_ui._rcPageUpUI, g_ptMouse)) {
+				if (_ui._selectLeftUI == 0 || _ui._selectLeftUI == 1 || _ui._selectLeftUI == 2) {
+					if (_ui._pageNum >= 1)
+						_ui._pageNum--;
 				}
 			}
 		}
 	}
+
+	if (_ui._selectLeftUI < 5) {
+		_isClicked = true;
+	}
+	else
+		_isClicked = false;
 }
 
 void Simtown::Render()
 {
 	DrawTileMap();
+
+	if (_isClicked && g_ptMouse.x > 100
+		&& g_ptMouse.y > 35 && g_ptMouse.y < WINSIZEY - 100) {
+		float cellX = (float)(g_ptMouse.x - _startX);
+
+		if (cellX < 0) {
+			cellX = (cellX - cell_width) / (float)cell_width;
+		}
+		else {
+			cellX = cellX / (float)cell_width;
+		}
+
+		float cellY = fabs(g_ptMouse.y - _startY) / cell_height;
+
+		cellY = (g_ptMouse.y < _startY) ? cellY * -1 : cellY;
+
+		int isoX = (int)cellX + (int)cellY;
+		int isoY = (int)cellY - (int)cellX;
+
+		if (isoX >= 0 && isoX < TILE_COUNT_X &&
+			isoY >= 0 && isoY < TILE_COUNT_Y) {
+			int corner = GetCornerIndex(isoX, isoY);
+
+			if (IsInRhombus(corner, isoX, isoY))
+				corner = 0;
+
+			switch (corner)
+			{
+			case 1:
+				isoX = isoX - 1;
+				break;
+			case 2:
+				isoY = isoY - 1;
+				break;
+			case 3:
+				isoY = isoY + 1;
+				break;
+			case 4:
+				isoX = isoX + 1;
+				break;
+			}
+
+			if (isoX >= 0 && isoX < TILE_COUNT_X &&
+				isoY >= 0 && isoY < TILE_COUNT_Y) {
+				_center = corner;
+				_isoX = isoX;
+				_isoY = isoY;
+			}
+		}
+
+		float left = _startX + (_isoX * radius_width) - (_isoY * radius_width);
+		float top = _startY + (_isoX * radius_height) + (_isoY * radius_height);
+
+		DrawTile(left, top);
+	}
+
 	DrawUI();
 
 	//sprintf_s(str, "isoX : %d, isoY : %d, corner : %d",
 	//	_isoX, _isoY, _center);
 	//TextOut(GetMemDC(), 700, 20, str, strlen(str));
 	if (_isDebug) {
-		RectangleMake(GetMemDC(), _rcTopUI);
+		RectangleMake(GetMemDC(), _ui._rcTopUI);
 		for (int i = 0; i < 14; i++) {
-			RectangleMake(GetMemDC(), _rcLeftUI[i]);
+			RectangleMake(GetMemDC(), _ui._rcLeftUI[i]);
 		}
 		for (int i = 0; i < 9; i++) {
-			RectangleMake(GetMemDC(), _rcBottomUI[i]);
+			RectangleMake(GetMemDC(), _ui._rcBottomUI[i]);
 		}
 
 		for (int i = 0; i < 3; i++) {
-			RectangleMake(GetMemDC(), _rcToolBarUI[i]);
+			RectangleMake(GetMemDC(), _ui._rcToolBarUI[i]);
 		}
 
 		for (int i = 3; i < 6; i++) {
-			RectangleMake(GetMemDC(), _rcSongUI[i - 3]);
+			RectangleMake(GetMemDC(), _ui._rcSongUI[i - 3]);
 		}
 
-		RectangleMake(GetMemDC(), _rcTownNameUI);
-		RectangleMake(GetMemDC(), _rcPopulationUI[0]);
-		RectangleMake(GetMemDC(), _rcPopulationUI[1]);
+		RectangleMake(GetMemDC(), _ui._rcTownNameUI);
+		RectangleMake(GetMemDC(), _ui._rcPopulationUI[0]);
+		RectangleMake(GetMemDC(), _ui._rcPopulationUI[1]);
+								 
+		RectangleMake(GetMemDC(), _ui._rcDebug);
 
-		RectangleMake(GetMemDC(), _rcDebug);
-
-		RectangleMake(GetMemDC(), _rcPageUpUI);
-		RectangleMake(GetMemDC(), _rcPageDownUI);
+		RectangleMake(GetMemDC(), _ui._rcPageUpUI);
+		RectangleMake(GetMemDC(), _ui._rcPageDownUI);
 
 		sprintf_s(str, "Debug Info");
 		TextOut(GetMemDC(), WINSIZEX - 300, 60, str, strlen(str));
@@ -294,23 +396,72 @@ void Simtown::Render()
 
 }
 
+void Simtown::UIInit()
+{
+	_ui._rcTopUI = RectMake(100, 0, WINSIZEX, 35);
+
+	_ui._selectLeftUI = 0;
+
+	_ui._rcLeftUI[0] = RectMake(0, 0, 100, 50);
+	_ui._rcLeftUI[1] = RectMake(0, 50, 100, 50);
+	_ui._rcLeftUI[2] = RectMake(0, 100, 100, 50);
+	_ui._rcLeftUI[3] = RectMake(0, 150, 100, 60);
+	_ui._rcLeftUI[4] = RectMake(0, 210, 100, 50);
+	_ui._rcLeftUI[5] = RectMake(0, 260, 100, 50);
+	_ui._rcLeftUI[6] = RectMake(0, 310, 100, 50);
+	_ui._rcLeftUI[7] = RectMake(0, 360, 100, 35);
+	_ui._rcLeftUI[8] = RectMake(0, 395, 100, 35);
+	_ui._rcLeftUI[9] = RectMake(0, 430, 100, 45);
+	_ui._rcLeftUI[10] = RectMake(0, 475, 100, 70);
+	_ui._rcLeftUI[11] = RectMake(0, 545, 100, 35);
+	_ui._rcLeftUI[12] = RectMake(0, 580, 100, 50);
+	_ui._rcLeftUI[13] = RectMake(0, 630, 100, 70);
+
+	_ui._rcBottomUI[0] = RectMake(100, WINSIZEY - 100, 300, 100);
+	for (int i = 1; i < 9; i++) {
+		_ui._rcBottomUI[i] = RectMake(100 * i + 300, WINSIZEY - 100, 100, 100);
+	}
+	_ui._selectBottomUI = 0;
+
+	_ui._rcDebug = RectMake(WINSIZEX - 320, 40, 320, 300);
+
+	_ui._pageNum = 0;
+
+	_ui._rcPageUpUI = RectMake(
+		_ui._rcBottomUI[8].left + 30, _ui._rcBottomUI[8].top + 10, 40, 40);
+	_ui._rcPageDownUI = RectMake(
+		_ui._rcBottomUI[8].left + 30, _ui._rcBottomUI[8].top + 50, 40, 40);
+
+	for (int i = 0; i < 3; i++) {
+		_ui._rcToolBarUI[i] = RectMake(i * 75 + 110, 5, 50, 25);
+	}
+
+	for (int i = 3; i < 6; i++) {
+		_ui._rcSongUI[i - 3] = RectMake(i * 75 + 110, 5, 50, 25);
+	}
+
+	_ui._rcTownNameUI = RectMake(560, 5, 200, 25);
+	_ui._rcPopulationUI[0] = RectMake(780, 5, 150, 25);
+	_ui._rcPopulationUI[1] = RectMake(950, 0, 150, 35);
+}
+
 void Simtown::CheckSize()
 {
-	switch (_selectSize)
+	switch (_tileSize)
 	{
-	case 0:
+	case TILESIZE_BIG:
 		cell_width = CELL_WIDTH;
 		cell_height = CELL_HEIGHT;
 		radius_width = RADIUS_WIDTH;
 		radius_height = RADIUS_HEIGHT;
 		break;
-	case 1:
+	case TILESIZE_MID:
 		cell_width = CELL_WIDTH2;
 		cell_height = CELL_HEIGHT2;
 		radius_width = cell_width / 2;
 		radius_height = cell_height / 2;
 		break;
-	case 2:
+	case TILESIZE_SMALL:
 		cell_width = CELL_WIDTH3;
 		cell_height = CELL_HEIGHT3;
 		radius_width = cell_width / 2;
@@ -322,25 +473,128 @@ void Simtown::CheckSize()
 void Simtown::FindImg()
 {
 	_land = IMAGE->FindImage("land");
-	_leftUI = IMAGE->FindImage("ui_left");
+	
+	FindUIImg();
+	FindBuildingImg();
 
-	_bottomUI[0] = IMAGE->FindImage("ui_bottom_1");
-	_bottomUI[1] = IMAGE->FindImage("ui_bottom_2");
-	_bottomUI[2] = IMAGE->FindImage("ui_bottom_3");
-	_bottomUI[3] = IMAGE->FindImage("ui_bottom_4");
-	_bottomUI[4] = IMAGE->FindImage("ui_bottom_5");
+}
 
-	_blankUI = IMAGE->FindImage("ui_blank");
+void Simtown::FindUIImg()
+{
+	_ui._leftUI = IMAGE->FindImage("ui_left");
 
-	_pageUpUI1 = IMAGE->FindImage("ui_click_up1");
-	_pageUpUI2 = IMAGE->FindImage("ui_click_up2");
-	_pageDownUI1 = IMAGE->FindImage("ui_click_down1");
-	_pageDownUI2 = IMAGE->FindImage("ui_click_down2");
+	_ui._bottomUI[0] = IMAGE->FindImage("ui_bottom_1");
+	_ui._bottomUI[1] = IMAGE->FindImage("ui_bottom_2");
+	_ui._bottomUI[2] = IMAGE->FindImage("ui_bottom_3");
+	_ui._bottomUI[3] = IMAGE->FindImage("ui_bottom_4");
+	_ui._bottomUI[4] = IMAGE->FindImage("ui_bottom_5");
 
-	_songUI = IMAGE->FindImage("ui_song");
-	_toolBarUI = IMAGE->FindImage("ui_toolBar");
+	_ui._blankUI = IMAGE->FindImage("ui_blank");
 
-	_populationUI = IMAGE->FindImage("ui_population");
+	_ui._pageUpUI1 = IMAGE->FindImage("ui_click_up1");
+	_ui._pageUpUI2 = IMAGE->FindImage("ui_click_up2");
+	_ui._pageDownUI1 = IMAGE->FindImage("ui_click_down1");
+	_ui._pageDownUI2 = IMAGE->FindImage("ui_click_down2");
+
+	_ui._songUI = IMAGE->FindImage("ui_song");
+	_ui._toolBarUI = IMAGE->FindImage("ui_toolBar");
+
+	_ui._populationUI = IMAGE->FindImage("ui_population");
+}
+
+void Simtown::FindBuildingImg()
+{
+	_building._houses[0][TILESIZE_BIG] =
+		IMAGE->FindImage("houses_adobe_house_big");
+	_building._houses[0][TILESIZE_MID] =
+		IMAGE->FindImage("houses_adobe_house_mid");
+	_building._houses[0][TILESIZE_SMALL] =
+		IMAGE->FindImage("houses_adobe_house_small");
+	_building._houses[0][TILESIZE_OPEN] =
+		IMAGE->FindImage("houses_adobe_house_open");
+}
+
+void Simtown::SelectTile()
+{
+	// 선택된 타일에 따라 isSelect true 
+	switch (_currentTileKind)
+	{
+	case TILEKIND_TILESETS:
+		break;
+	case TILEKIND_HOUSES:
+		switch (_currentTileNum)
+		{
+		case 0:
+			if (_tileMap[_isoX][_isoY - 1].isSelected) {
+				_tileMap[_isoX][_isoY].isStartDraw = false;
+				return;
+			}
+
+			_tileMap[_isoX][_isoY].isSelected = true;
+			_tileMap[_isoX][_isoY - 1].isSelected = true;
+			break;
+		case 1:
+			break;
+		case 2:
+			break;
+		case 3:
+			break;
+		case 4:
+			break;
+		case 5:
+			break;
+		case 6:
+			break;
+		}
+		break;
+	case TILEKIND_BUSINESSES:
+		break;
+	case TILEKIND_COMMUNITYBUILDINS:
+		break;
+	case TILEKIND_FUNPLACES:
+		break;
+	}
+
+	// 타일에 선택된 타일 정보 저장
+	_tileMap[_isoX][_isoY].tileKind = _currentTileKind;
+	_tileMap[_isoX][_isoY].tileNum = _currentTileNum;
+}
+
+void Simtown::DeleteTile()
+{
+	// 선택된 타일에 따라 isSelect true 
+	switch (_currentTileKind)
+	{
+	case TILEKIND_TILESETS:
+		break;
+	case TILEKIND_HOUSES:
+		switch (_currentTileNum)
+		{
+		case 0:
+			_tileMap[_isoX][_isoY].isSelected = false;
+			_tileMap[_isoX][_isoY - 1].isSelected = false;
+			break;
+		case 1:
+			break;
+		case 2:
+			break;
+		case 3:
+			break;
+		case 4:
+			break;
+		case 5:
+			break;
+		case 6:
+			break;
+		}
+		break;
+	case TILEKIND_BUSINESSES:
+		break;
+	case TILEKIND_COMMUNITYBUILDINS:
+		break;
+	case TILEKIND_FUNPLACES:
+		break;
+	}
 }
 
 void Simtown::DrawTileMap()
@@ -359,6 +613,26 @@ void Simtown::DrawTileMap()
 			//IMAGE->Render("land_big", GetMemDC(), left, top);
 
 			_land->Render(GetMemDC(), left, top, cell_width, cell_height);
+			if (_tileMap[i][j].isStartDraw) {
+				switch (_tileMap[i][j].tileKind)
+				{
+				case TILEKIND_TILESETS:
+					break;
+				case TILEKIND_HOUSES:
+					_building._houses[_currentTileNum][_tileSize]
+						->Render(GetMemDC(), left, top - cell_height,
+							cell_width + cell_width / 4,
+							cell_height * 2);
+					break;
+				case TILEKIND_BUSINESSES:
+					break;
+				case TILEKIND_COMMUNITYBUILDINS:
+					break;
+				case TILEKIND_FUNPLACES:
+					break;
+				}
+			}
+			
 			_tileCnt++;
 
 			if (_isDebug) {
@@ -481,14 +755,14 @@ bool Simtown::IsInRhombus(int corner, int isoX, int isoY)
 void Simtown::DrawUI()
 {
 	// top
-	_blankUI->Render(GetMemDC(),
-		_rcTopUI.left, _rcTopUI.top, WINSIZEX, 35);
+	_ui._blankUI->Render(GetMemDC(),
+		_ui._rcTopUI.left, _ui._rcTopUI.top, WINSIZEX, 35);
 
 	for (int i = 0; i < 3; i++) {
-		_toolBarUI->FrameRender(GetMemDC(),
-			_rcToolBarUI[i].left, _rcToolBarUI[i].top, i, 0);
-		_songUI->FrameRender(GetMemDC(),
-			_rcSongUI[i].left, _rcSongUI[i].top, i, 0);
+		_ui._toolBarUI->FrameRender(GetMemDC(),
+			_ui._rcToolBarUI[i].left, _ui._rcToolBarUI[i].top, i, 0);
+		_ui._songUI->FrameRender(GetMemDC(),
+			_ui._rcSongUI[i].left, _ui._rcSongUI[i].top, i, 0);
 	}
 
 	SetTextColor(GetMemDC(), RGB(0, 0, 0));
@@ -496,80 +770,81 @@ void Simtown::DrawUI()
 	BeginCreateFont(GetMemDC(), &hfont, 14);
 
 	sprintf_s(str, "마을 이름 : 심타운");
-	TextOut(GetMemDC(), _rcTownNameUI.left + 15, 
-		_rcTownNameUI.top + 5, str, strlen(str));
+	TextOut(GetMemDC(), _ui._rcTownNameUI.left + 15,
+		_ui._rcTownNameUI.top + 5, str, strlen(str));
 
 	sprintf_s(str, "인구 : %d명", 0);
-	TextOut(GetMemDC(), _rcPopulationUI[0].left, 
-		_rcPopulationUI[0].top + 5, str, strlen(str));
+	TextOut(GetMemDC(), _ui._rcPopulationUI[0].left,
+		_ui._rcPopulationUI[0].top + 5, str, strlen(str));
 
-	_populationUI->FrameRender(GetMemDC(),
-		_rcPopulationUI[1].left, _rcPopulationUI[1].top, 0, 0);
+	_ui._populationUI->FrameRender(GetMemDC(),
+		_ui._rcPopulationUI[1].left, _ui._rcPopulationUI[1].top, 0, 0);
 
 	LineMake(GetMemDC(), PointMake(560, 0), PointMake(560, 35));
 	LineMake(GetMemDC(), PointMake(760, 0), PointMake(760, 35));
 	LineMake(GetMemDC(), PointMake(950, 0), PointMake(950, 35));
 
 	// left
-	_leftUI->FrameRender(GetMemDC(),
-		_rcLeftUI[0].left, _rcLeftUI[0].top, _selectLeftUI + _selectSize * 11, 0);
+	_ui._leftUI->FrameRender(GetMemDC(),
+		_ui._rcLeftUI[0].left, _ui._rcLeftUI[0].top, 
+		_ui._selectLeftUI + _tileSize * 11, 0);
 
 	// bottom
 
-	if (_selectLeftUI < 5) {
+	if (_isClicked) {
 
-		_blankUI->Render(GetMemDC(),
-			_rcBottomUI[0].left, _rcBottomUI[0].top, 300, 100);
-		_blankUI->Render(GetMemDC(),
-			_rcBottomUI[8].left, _rcBottomUI[8].top);
+		_ui._blankUI->Render(GetMemDC(),
+			_ui._rcBottomUI[0].left, _ui._rcBottomUI[0].top, 300, 100);
+		_ui._blankUI->Render(GetMemDC(),
+			_ui._rcBottomUI[8].left, _ui._rcBottomUI[8].top);
 
 		Image * temp = NULL;
 
-		switch (_selectLeftUI)
+		switch (_ui._selectLeftUI)
 		{
 		case 0:
-			temp = _bottomUI[0];
+			temp = _ui._bottomUI[0];
 			break;
 		case 1:
-			temp = _bottomUI[1];
+			temp = _ui._bottomUI[1];
 			break;
 		case 2:
-			temp = _bottomUI[2];
+			temp = _ui._bottomUI[2];
 			break;
 		case 3:
-			temp = _bottomUI[3];
+			temp = _ui._bottomUI[3];
 			break;
 		case 4:
-			temp = _bottomUI[4];
+			temp = _ui._bottomUI[4];
 			break;
 		}
 
 		for (int i = 1; i < 8; i++) {
-			if (!(_selectLeftUI == 0 || _selectLeftUI == 1 || _selectLeftUI == 2))
-				_pageNum = 0;
+			if (!(_ui._selectLeftUI == 0 || _ui._selectLeftUI == 1 || _ui._selectLeftUI == 2))
+				_ui._pageNum = 0;
 
-			if (i - 1 == _selectBottomUI)
+			if (i - 1 == _ui._selectBottomUI)
 				temp->FrameRender(GetMemDC(),
-					_rcBottomUI[i].left, _rcBottomUI[i].top, 1, i - 1 + _pageNum * 7);
+					_ui._rcBottomUI[i].left, _ui._rcBottomUI[i].top, 1, i - 1 + _ui._pageNum * 7);
 			else
 				temp->FrameRender(GetMemDC(),
-					_rcBottomUI[i].left, _rcBottomUI[i].top, 0, i - 1 + _pageNum * 7);
+					_ui._rcBottomUI[i].left, _ui._rcBottomUI[i].top, 0, i - 1 + _ui._pageNum * 7);
 		}
 
 		// page
 
-		if (_selectLeftUI == 0 || _selectLeftUI == 1 || _selectLeftUI == 2) {
-			_pageUpUI2->Render(GetMemDC(), _rcPageUpUI.left, _rcPageUpUI.top);
-			_pageDownUI2->Render(GetMemDC(), _rcPageDownUI.left, _rcPageDownUI.top);
+		if (_ui._selectLeftUI == 0 || _ui._selectLeftUI == 1 || _ui._selectLeftUI == 2) {
+			_ui._pageUpUI2->Render(GetMemDC(), _ui._rcPageUpUI.left, _ui._rcPageUpUI.top);
+			_ui._pageDownUI2->Render(GetMemDC(), _ui._rcPageDownUI.left, _ui._rcPageDownUI.top);
 		}
 		else {
-			_pageUpUI1->Render(GetMemDC(), _rcPageUpUI.left, _rcPageUpUI.top);
-			_pageDownUI1->Render(GetMemDC(), _rcPageDownUI.left, _rcPageDownUI.top);
+			_ui._pageUpUI1->Render(GetMemDC(), _ui._rcPageUpUI.left, _ui._rcPageUpUI.top);
+			_ui._pageDownUI1->Render(GetMemDC(), _ui._rcPageDownUI.left, _ui._rcPageDownUI.top);
 		}
 	}
 	else {
-		_blankUI->Render(GetMemDC(),
-			_rcBottomUI[0].left, _rcBottomUI[0].top, WINSIZEX, 100);
+		_ui._blankUI->Render(GetMemDC(),
+			_ui._rcBottomUI[0].left, _ui._rcBottomUI[0].top, WINSIZEX, 100);
 	}
 
 	LineMake(GetMemDC(), PointMake(100, 35), PointMake(WINSIZEX, 35));
@@ -577,4 +852,25 @@ void Simtown::DrawUI()
 	LineMake(GetMemDC(), PointMake(100, WINSIZEY - 100), PointMake(WINSIZEX, WINSIZEY - 100));
 	LineMake(GetMemDC(), PointMake(0, 0), PointMake(WINSIZEX, 0));
 	LineMake(GetMemDC(), PointMake(100, 0), PointMake(100, WINSIZEY));
+}
+
+void Simtown::DrawTile(int left, int top)
+{
+	switch (_currentTileKind)
+	{
+	case TILEKIND_TILESETS:
+		break;
+	case TILEKIND_HOUSES:
+		_building._houses[_currentTileNum][_tileSize]
+			->Render(GetMemDC(), left, top - cell_height,
+				cell_width + cell_width / 4,
+				cell_height * 2);
+		break; 
+	case TILEKIND_BUSINESSES:
+		break;
+	case TILEKIND_COMMUNITYBUILDINS:
+		break;
+	case TILEKIND_FUNPLACES:
+		break;
+	}
 }

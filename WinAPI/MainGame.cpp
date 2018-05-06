@@ -99,6 +99,21 @@ void MainGame::LoadTile()
 
 void MainGame::LoadBuilding()
 {
+	IMAGE->AddImage("houses_adobe_house_open",
+		"images/houses/open/adobe_house.bmp", 0, 0,
+		CELL_WIDTH * 2, CELL_HEIGHT * 2, true, RGB(255, 0, 255));
+
+	IMAGE->AddImage("houses_adobe_house_big",
+		"images/houses/big/adobe_house.bmp", 0, 0,
+		CELL_WIDTH + 50, CELL_HEIGHT * 2, true, RGB(255, 0, 255));
+	
+	IMAGE->AddImage("houses_adobe_house_mid",
+		"images/houses/mid/adobe_house.bmp", 0, 0,
+		CELL_WIDTH / 2 + 25, CELL_HEIGHT, true, RGB(255, 0, 255));
+
+	IMAGE->AddImage("houses_adobe_house_small",
+		"images/houses/small/adobe_house.bmp", 0, 0,
+		CELL_WIDTH / 4 + 12.5, CELL_HEIGHT / 2, true, RGB(255, 0, 255));
 }
 
 void MainGame::LoadUI()

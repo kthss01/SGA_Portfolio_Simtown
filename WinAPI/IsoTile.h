@@ -20,5 +20,9 @@
 #define TILE_COUNT_Y 1000
 
 struct tagTile {
+	int tileKind;
+	int tileNum;
+
+	bool isStartDraw;
 	bool isSelected;
 };
