@@ -32,12 +32,7 @@ HRESULT Simtown::Init()
 	radius_width = RADIUS_WIDTH;
 	radius_height = RADIUS_HEIGHT;
 
-	for (int i = 0; i < TILE_COUNT_X; i++) {
-		for (int j = 0; j < TILE_COUNT_Y; j++) {
-			_tileMap[i][j].isSelected = false;
-			_tileMap[i][j].isStartDraw = false;
-		}
-	}
+	InitTile();
 
 	UIInit();
 
@@ -57,7 +52,7 @@ void Simtown::Update()
 	if (INPUT->GetKey('A')) { _startX += 5; }
 	if (INPUT->GetKey('D')) { _startX -= 5; }
 
-	if (INPUT->GetKey('1')) {
+	if (INPUT->GetKeyDown('1')) {
 		switch (_tileSize)
 		{
 		case TILESIZE_SMALL:
@@ -74,7 +69,7 @@ void Simtown::Update()
 		_tileSize = TILESIZE_BIG; 
 		CheckSize(); 
 	}
-	if (INPUT->GetKey('2')) { 
+	if (INPUT->GetKeyDown('2')) { 
 		switch (_tileSize)
 		{
 		case TILESIZE_SMALL:
@@ -91,7 +86,7 @@ void Simtown::Update()
 		_tileSize = TILESIZE_MID; 
 		CheckSize(); 
 	}
-	if (INPUT->GetKey('3')) { 
+	if (INPUT->GetKeyDown('3')) { 
 		switch (_tileSize)
 		{
 		case TILESIZE_SMALL:
@@ -149,63 +144,68 @@ void Simtown::Update()
 
 	if (INPUT->GetKey(VK_LBUTTON)) {
 		// tile Select
-		if(g_ptMouse.x > 100 
-			&& g_ptMouse.y > 35 && g_ptMouse.y < WINSIZEY - 100) {
-			float cellX = (float)(g_ptMouse.x - _startX);
+		{
+			if (g_ptMouse.x > 100
+				&& g_ptMouse.y > 35 && g_ptMouse.y < WINSIZEY - 100) {
 
-			if (cellX < 0) {
-				cellX = (cellX - cell_width) / (float)cell_width;
-			}
-			else {
-				cellX = cellX / (float)cell_width;
-			}
+				float cellX = (float)(g_ptMouse.x - _startX);
 
-			float cellY = fabs(g_ptMouse.y - _startY) / cell_height;
-
-			cellY = (g_ptMouse.y < _startY) ? cellY * -1 : cellY;
-
-			int isoX = (int)cellX + (int)cellY;
-			int isoY = (int)cellY - (int)cellX;
-
-			if (isoX >= 0 && isoX < TILE_COUNT_X &&
-				isoY >= 0 && isoY < TILE_COUNT_Y) {
-				int corner = GetCornerIndex(isoX, isoY);
-
-				if (IsInRhombus(corner, isoX, isoY))
-					corner = 0;
-
-				switch (corner)
-				{
-				case 1:
-					isoX = isoX - 1;
-					break;
-				case 2:
-					isoY = isoY - 1;
-					break;
-				case 3:
-					isoY = isoY + 1;
-					break;
-				case 4:
-					isoX = isoX + 1;
-					break;
+				if (cellX < 0) {
+					cellX = (cellX - cell_width) / (float)cell_width;
 				}
+				else {
+					cellX = cellX / (float)cell_width;
+				}
+
+				float cellY = fabs(g_ptMouse.y - _startY) / cell_height;
+
+				cellY = (g_ptMouse.y < _startY) ? cellY * -1 : cellY;
+
+				int isoX = (int)cellX + (int)cellY;
+				int isoY = (int)cellY - (int)cellX;
 
 				if (isoX >= 0 && isoX < TILE_COUNT_X &&
 					isoY >= 0 && isoY < TILE_COUNT_Y) {
+					int corner = GetCornerIndex(isoX, isoY);
 
-					_center = corner;
-					_isoX = isoX;
-					_isoY = isoY;
+					if (IsInRhombus(corner, isoX, isoY))
+						corner = 0;
 
-					if (_ui._selectLeftUI == 5 && _tileMap[isoX][isoY].isStartDraw) {
-						_tileMap[isoX][isoY].isStartDraw = false;
-						DeleteTile();
+					switch (corner)
+					{
+					case 1:
+						isoX = isoX - 1;
+						break;
+					case 2:
+						isoY = isoY - 1;
+						break;
+					case 3:
+						isoY = isoY + 1;
+						break;
+					case 4:
+						isoX = isoX + 1;
+						break;
 					}
 
-					if (!_tileMap[isoX][isoY].isSelected && _isClicked) {
-						_tileMap[isoX][isoY].isStartDraw = true;
-						SelectTile();
-						//_tileMap[isoX][isoY].isSelected = true;
+					if (isoX >= 0 && isoX < TILE_COUNT_X &&
+						isoY >= 0 && isoY < TILE_COUNT_Y) {
+
+						_center = corner;
+						_isoX = isoX;
+						_isoY = isoY;
+
+						if (_ui._selectLeftUI == 5 && _tileMap[isoX][isoY].isStartDraw) {
+							SOUND->Play("tile_destroy");
+							_tileMap[isoX][isoY].isStartDraw = false;
+							DeleteTile();
+						}
+
+						if (!_tileMap[isoX][isoY].isSelected && _isClicked) {
+							_tileMap[isoX][isoY].isStartDraw = true;
+							SelectTile();
+							if (_tileMap[isoX][isoY].isStartDraw)
+								SOUND->Play("tile_click");
+						}
 					}
 				}
 			}
@@ -215,9 +215,31 @@ void Simtown::Update()
 	if (INPUT->GetKeyDown(VK_LBUTTON)) {
 		// ui Select
 		{
+			// top ui
+			if (PtInRect(&_ui._rcToolBarUI[0], g_ptMouse)) {
+				InitTile();
+			}
+			if (PtInRect(&_ui._rcToolBarUI[1], g_ptMouse)) {
+				SaveTile();
+			}
+			if (PtInRect(&_ui._rcToolBarUI[2], g_ptMouse)) {
+				LoadTile();
+			}
+
+			if (PtInRect(&_ui._rcSongUI[0], g_ptMouse)) {
+				PlaySong(0);
+			}
+			if (PtInRect(&_ui._rcSongUI[1], g_ptMouse)) {
+				PlaySong(1);
+			}
+			if (PtInRect(&_ui._rcSongUI[2], g_ptMouse)) {
+				PlaySong(2);
+			}
+
 			// left ui
 			for (int i = 0; i < 14; i++) {
 				if (PtInRect(&_ui._rcLeftUI[i], g_ptMouse)) {
+					SOUND->Play("tile_select");
 					if (i == 7 || i == 8 || i == 9) {
 						_tileSize = (TileSize)(i - 7);
 						CheckSize();
@@ -244,6 +266,7 @@ void Simtown::Update()
 			// bottom ui
 			for (int i = 1; i < 8; i++) {
 				if (PtInRect(&_ui._rcBottomUI[i], g_ptMouse)) {
+					SOUND->Play("tile_select");
 					_ui._selectBottomUI = i - 1;
 					_currentTileNum = i - 1 + (_ui._pageNum * 7);
 					break;
@@ -253,6 +276,7 @@ void Simtown::Update()
 			// page ui
 			if (PtInRect(&_ui._rcPageDownUI, g_ptMouse)) {
 				if (_ui._selectLeftUI == 0 || _ui._selectLeftUI == 1 || _ui._selectLeftUI == 2) {
+					SOUND->Play("tile_select");
 					if (_ui._selectLeftUI == 0 && _ui._pageNum <= 1)
 						_ui._pageNum++;
 					else if (_ui._pageNum <= 0)
@@ -261,6 +285,7 @@ void Simtown::Update()
 			}
 			if (PtInRect(&_ui._rcPageUpUI, g_ptMouse)) {
 				if (_ui._selectLeftUI == 0 || _ui._selectLeftUI == 1 || _ui._selectLeftUI == 2) {
+					SOUND->Play("tile_select");
 					if (_ui._pageNum >= 1)
 						_ui._pageNum--;
 				}
@@ -871,6 +896,107 @@ void Simtown::DrawTile(int left, int top)
 	case TILEKIND_COMMUNITYBUILDINS:
 		break;
 	case TILEKIND_FUNPLACES:
+		break;
+	}
+}
+
+void Simtown::SaveTile()
+{
+	// api가 가지고있는 save 함수 사용
+	// 구조체로 넣을 수도 있고
+	// 마찬가지로 배열로도 넣을 수 있음
+	// 바이너리 파일이라 이미지 같은 웬만한거 다됨
+	HANDLE file;
+	DWORD write;
+
+	// CreateFile Binary 형식으로 들어감
+	// Binary 16진수 데이터 형식으로 들어감
+	// Binary 한글 관련으로 문제가 있었음
+	// binary라 일반적인 fopen 보다 빠름 대신 한줄로 쭉 써짐
+	file = CreateFile(
+		"save/tileMap.map",	// 생성할 파일 또는 로드할 파일의 이름
+		GENERIC_WRITE,	// 파일이나 장치를 만들거나 열때의 권한
+		0,				// 파일 공유 모드 입력
+		NULL,			// 파일 또는 장치를 열 때 보안 및 특성
+						// 항상 처음부터 작성하겠다는거 다 지우고
+						// 여기 바꿔주면 라인별로 넣을 수 있음
+		CREATE_ALWAYS,	// 파일이나 장치를 열 때 취할 행동
+		FILE_ATTRIBUTE_NORMAL,	// 파일, 장치를 열 때, 만들 때 갖는 특성
+		NULL			// 만들어질 파일이 갖게 될 특성 etc 저장되는 핸들
+	);
+
+	// 구분점은 따로 없고 쭉 들어가므로 사이즈로 구분해서 읽어와야함
+	WriteFile(file, _tileMap,
+		sizeof(tagTile) * TILE_COUNT_X * TILE_COUNT_Y, &write, NULL);
+
+	CloseHandle(file);
+}
+
+void Simtown::LoadTile()
+{
+	// api가 가지고있는 save 함수 사용
+	// 구조체로 넣을 수도 있고
+	// 마찬가지로 배열로도 넣을 수 있음
+	HANDLE file;
+	DWORD read;
+
+	// CreateFile Binary 형식으로 들어감
+	// Binary 16진수 데이터 형식으로 들어감
+	// Binary 한글 관련으로 문제가 있었음
+	// binary라 일반적인 fopen 보다 빠름 대신 한줄로 쭉 써짐
+	file = CreateFile(
+		"save/tileMap.map",	// 생성할 파일 또는 로드할 파일의 이름
+		GENERIC_READ, /// 수정	// 파일이나 장치를 만들거나 열때의 권한
+		0,				// 파일 공유 모드 입력
+		NULL,			// 파일 또는 장치를 열 때 보안 및 특성
+						// 항상 처음부터 작성하겠다는거 다 지우고
+						// 여기 바꿔주면 라인별로 넣을 수 있음
+		OPEN_EXISTING, /// 수정	// 파일이나 장치를 열 때 취할 행동
+		FILE_ATTRIBUTE_NORMAL,	// 파일, 장치를 열 때, 만들 때 갖는 특성
+		NULL			// 만들어질 파일이 갖게 될 특성 etc 저장되는 핸들
+	);
+
+	// 구분점은 따로 없고 쭉 들어가므로 사이즈로 구분해서 읽어와야함
+	ReadFile(file, _tileMap,
+		sizeof(tagTile) * TILE_COUNT_X * TILE_COUNT_Y, &read, NULL);
+
+	CloseHandle(file);
+}
+
+void Simtown::InitTile()
+{
+	for (int i = 0; i < TILE_COUNT_X; i++) {
+		for (int j = 0; j < TILE_COUNT_Y; j++) {
+			_tileMap[i][j].isSelected = false;
+			_tileMap[i][j].isStartDraw = false;
+		}
+	}
+}
+
+void Simtown::PlaySong(int num)
+{
+	switch (num)
+	{
+	case 0:
+		if (SOUND->IsPlaySound("song2")) SOUND->Stop("song2");
+		if (SOUND->IsPlaySound("song3")) SOUND->Stop("song3");
+		if (SOUND->IsPlaySound("song1")) SOUND->Stop("song1");
+		else
+			SOUND->Play("song1", 0.75f);
+		break;
+	case 1:
+		if (SOUND->IsPlaySound("song1")) SOUND->Stop("song1");
+		if (SOUND->IsPlaySound("song3")) SOUND->Stop("song3");
+		if (SOUND->IsPlaySound("song2")) SOUND->Stop("song2");
+		else
+			SOUND->Play("song2", 0.75f);
+		break;
+	case 2:
+		if (SOUND->IsPlaySound("song1")) SOUND->Stop("song1");
+		if (SOUND->IsPlaySound("song2")) SOUND->Stop("song2");
+		if (SOUND->IsPlaySound("song3")) SOUND->Stop("song3");
+		else
+			SOUND->Play("song3", 0.75f);
 		break;
 	}
 }

@@ -31,6 +31,15 @@ HRESULT MainGame::Init()
 	SOUND->Init();
 	//SOUND->AddSound("Test", "sounds/영전3.wav", true, true);
 
+	SOUND->AddSound("song1", "sounds/song/SimTown - Song 1.mp3", true, true);
+	SOUND->AddSound("song2", "sounds/song/SimTown - Song 2.mp3", true, true);
+	SOUND->AddSound("song3", "sounds/song/SimTown - Song 3.mp3", true, true);
+
+	SOUND->AddSound("tile_click", "sounds/effect/tile click.mp3", false, false);
+	SOUND->AddSound("tile_destroy", "sounds/effect/tile destroy.mp3", false, false);
+	SOUND->AddSound("tile_error", "sounds/effect/tile error.mp3", false, false);
+	SOUND->AddSound("tile_select", "sounds/effect/tile select.mp3", false, false);
+
 #ifdef SUBWINOPEN
 	SUBWIN->SetScene(test);
 #endif // SUBWINDOW 필요시 MainGame.h 주석 제거

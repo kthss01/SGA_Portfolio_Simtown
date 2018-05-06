@@ -118,5 +118,11 @@ public:
 
 	void DrawUI();
 	void DrawTile(int left, int top);
+
+	void SaveTile();
+	void LoadTile();
+	void InitTile();
+
+	void PlaySong(int num);
 };
 
