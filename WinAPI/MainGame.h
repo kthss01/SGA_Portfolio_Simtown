@@ -21,5 +21,9 @@ public:
 	void LoadSimtownImg();
 	void LoadTile();
 	void LoadBuilding();
+	void LoadHouses();
+	void LoadCommunityBuildings();
+	void LoadBusinesses();
+	void LoadFunPlaces();
 	void LoadUI();
 };

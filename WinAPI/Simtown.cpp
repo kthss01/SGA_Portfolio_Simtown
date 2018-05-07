@@ -38,6 +38,8 @@ HRESULT Simtown::Init()
 
 	_isClicked = false;
 
+	_population = 0;
+
 	return S_OK;
 }
 
@@ -539,6 +541,42 @@ void Simtown::FindTileImg()
 	_tile._houses[0][TILESIZE_OPEN] =
 		IMAGE->FindImage("houses_adobe_house_open");
 
+	_tile._houses[2][TILESIZE_BIG] =
+		IMAGE->FindImage("houses_ranch_house_big");
+	_tile._houses[2][TILESIZE_MID] =
+		IMAGE->FindImage("houses_ranch_house_mid");
+	_tile._houses[2][TILESIZE_SMALL] =
+		IMAGE->FindImage("houses_ranch_house_small");
+	_tile._houses[2][TILESIZE_OPEN] =
+		IMAGE->FindImage("houses_ranch_house_open");
+
+	_tile._houses[3][TILESIZE_BIG] =
+		IMAGE->FindImage("houses_apartment_big");
+	_tile._houses[3][TILESIZE_MID] =
+		IMAGE->FindImage("houses_apartment_mid");
+	_tile._houses[3][TILESIZE_SMALL] =
+		IMAGE->FindImage("houses_apartment_small");
+	_tile._houses[3][TILESIZE_OPEN] =
+		IMAGE->FindImage("houses_apartment_open");
+
+	_tile._houses[4][TILESIZE_BIG] =
+		IMAGE->FindImage("houses_victorian_house_big");
+	_tile._houses[4][TILESIZE_MID] =
+		IMAGE->FindImage("houses_victorian_house_mid");
+	_tile._houses[4][TILESIZE_SMALL] =
+		IMAGE->FindImage("houses_victorian_house_small");
+	_tile._houses[4][TILESIZE_OPEN] =
+		IMAGE->FindImage("houses_victorian_house_open");
+
+	_tile._houses[5][TILESIZE_BIG] =
+		IMAGE->FindImage("houses_cottage_big");
+	_tile._houses[5][TILESIZE_MID] =
+		IMAGE->FindImage("houses_cottage_mid");
+	_tile._houses[5][TILESIZE_SMALL] =
+		IMAGE->FindImage("houses_cottage_small");
+	_tile._houses[5][TILESIZE_OPEN] =
+		IMAGE->FindImage("houses_cottage_open");
+
 	_tile._tile[0][TILESIZE_BIG] =
 		IMAGE->FindImage("road_big");
 	_tile._tile[0][TILESIZE_MID] =
@@ -627,19 +665,65 @@ void Simtown::SelectTile()
 				_tileMap[_isoX][_isoY].isStartDraw = false;
 				return;
 			}
+			_population += 2;
 
 			_tileMap[_isoX][_isoY].isSelected = true;
 			_tileMap[_isoX][_isoY - 1].isSelected = true;
 			break;
 		case 1:
+
 			break;
 		case 2:
+			if (_isoX + 1 > TILE_COUNT_X ||
+				_tileMap[_isoX + 1][_isoY].isSelected) {
+				_tileMap[_isoX][_isoY].isStartDraw = false;
+				return;
+			}
+			_population += 4;
+
+			_tileMap[_isoX][_isoY].isSelected = true;
+			_tileMap[_isoX + 1][_isoY].isSelected = true;
 			break;
 		case 3:
+			if (_isoX + 1 > TILE_COUNT_X || _isoY - 1 < 0 ||
+				_tileMap[_isoX + 1][_isoY].isSelected ||
+				_tileMap[_isoX + 1][_isoY].isSelected ||
+				_tileMap[_isoX + 1][_isoY - 1].isSelected) {
+				_tileMap[_isoX][_isoY].isStartDraw = false;
+				return;
+			}
+			_population += 8;
+
+			_tileMap[_isoX][_isoY].isSelected = true;
+			_tileMap[_isoX][_isoY - 1].isSelected = true;
+			_tileMap[_isoX + 1][_isoY].isSelected = true;
+			_tileMap[_isoX + 1][_isoY - 1].isSelected = true;
 			break;
 		case 4:
+			if (_isoX + 1 > TILE_COUNT_X || _isoY - 1 < 0 ||
+				_tileMap[_isoX + 1][_isoY].isSelected ||
+				_tileMap[_isoX + 1][_isoY].isSelected ||
+				_tileMap[_isoX + 1][_isoY - 1].isSelected) {
+				_tileMap[_isoX][_isoY].isStartDraw = false;
+				return;
+			}
+			_population += 4;
+
+			_tileMap[_isoX][_isoY].isSelected = true;
+			_tileMap[_isoX][_isoY - 1].isSelected = true;
+			_tileMap[_isoX + 1][_isoY].isSelected = true;
+			_tileMap[_isoX + 1][_isoY - 1].isSelected = true;
 			break;
 		case 5:
+			if (_isoX + 1 > TILE_COUNT_X ||
+				_tileMap[_isoX + 1][_isoY].isSelected) {
+				_tileMap[_isoX][_isoY].isStartDraw = false;
+				return;
+			}
+			_population += 3;
+
+			_tileMap[_isoX][_isoY].isSelected = true;
+			_tileMap[_isoX + 1][_isoY].isSelected = true;
 			break;
 		case 6:
 			break;
@@ -726,19 +810,57 @@ void Simtown::DeleteTile()
 				_tileMap[_isoX][_isoY].isStartDraw = true;
 				return;
 			}
+			_population -= 2;
 
 			_tileMap[_isoX][_isoY].isSelected = false;
 			_tileMap[_isoX][_isoY - 1].isSelected = false;
 			break;
 		case 1:
+
 			break;
 		case 2:
+			if (_isoX + 1 > TILE_COUNT_X) {
+				_tileMap[_isoX][_isoY].isStartDraw = true;
+				return;
+			}
+			_population -= 4;
+
+			_tileMap[_isoX][_isoY].isSelected = false;
+			_tileMap[_isoX + 1][_isoY].isSelected = false;
 			break;
 		case 3:
+			if (_isoX + 1 > TILE_COUNT_X || _isoY - 1 < 0) {
+				_tileMap[_isoX][_isoY].isStartDraw = true;
+				return;
+			}
+			_population -= 8;
+
+			_tileMap[_isoX][_isoY].isSelected = false;
+			_tileMap[_isoX][_isoY - 1].isSelected = false;
+			_tileMap[_isoX + 1][_isoY].isSelected = false;
+			_tileMap[_isoX + 1][_isoY - 1].isSelected = false;
 			break;
 		case 4:
+			if (_isoX + 1 > TILE_COUNT_X || _isoY - 1 < 0) {
+				_tileMap[_isoX][_isoY].isStartDraw = true;
+				return;
+			}
+			_population -= 4;
+
+			_tileMap[_isoX][_isoY].isSelected = false;
+			_tileMap[_isoX][_isoY - 1].isSelected = false;
+			_tileMap[_isoX + 1][_isoY].isSelected = false;
+			_tileMap[_isoX + 1][_isoY - 1].isSelected = false;
 			break;
 		case 5:
+			if (_isoX + 1 > TILE_COUNT_X) {
+				_tileMap[_isoX][_isoY].isStartDraw = true;
+				return;
+			}
+			_population -= 3;
+
+			_tileMap[_isoX][_isoY].isSelected = false;
+			_tileMap[_isoX + 1][_isoY].isSelected = false;
 			break;
 		case 6:
 			break;
@@ -814,17 +936,86 @@ void Simtown::DrawTileMap()
 							MakeRoad(i,j), 0, cell_width * 2, cell_height * 2);
 					break;
 				case TILEKIND_HOUSES:
-					if (_ui._selectLeftUI == 6 && cell_width > CELL_WIDTH) {
-						_tile._houses[_tileMap[i][j].tileNum][TILESIZE_OPEN]
+					switch (_tileMap[i][j].tileNum)
+					{
+					case 0:
+						if (_ui._selectLeftUI == 6 && cell_width > CELL_WIDTH) {
+							_tile._houses[_tileMap[i][j].tileNum][TILESIZE_OPEN]
+								->Render(GetMemDC(), left, top - cell_height,
+									cell_width + cell_width / 4,
+									cell_height * 2);
+						}
+						else
+							_tile._houses[_tileMap[i][j].tileNum][_tileSize]
 							->Render(GetMemDC(), left, top - cell_height,
 								cell_width + cell_width / 4,
 								cell_height * 2);
+						break;
+					case 1:
+
+						break;
+					case 2:
+						if (_ui._selectLeftUI == 6 && cell_width > CELL_WIDTH) {
+							_tile._houses[_tileMap[i][j].tileNum][TILESIZE_OPEN]
+								->Render(GetMemDC(), left,
+									top - cell_height / 2 - cell_height / 4,
+									cell_width + cell_width / 4,
+									cell_height * 2);
+						}
+						else
+							_tile._houses[_tileMap[i][j].tileNum][_tileSize]
+							->Render(GetMemDC(), left,
+								top - cell_height / 2 - cell_height / 4,
+								cell_width + cell_width / 4,
+								cell_height * 2);
+						break;
+					case 3:
+						if (_ui._selectLeftUI == 6 && cell_width > CELL_WIDTH) {
+							_tile._houses[_tileMap[i][j].tileNum][TILESIZE_OPEN]
+								->Render(GetMemDC(), left,
+									top - cell_height - cell_height / 2 - cell_height / 4 - cell_height / 8,
+									cell_width + cell_width / 2,
+									cell_height * 3 + cell_height / 4);
+						}
+						else
+							_tile._houses[_tileMap[i][j].tileNum][_tileSize]
+							->Render(GetMemDC(), left,
+								top - cell_height - cell_height / 2 - cell_height / 4 - cell_height / 8,
+								cell_width + cell_width / 2,
+								cell_height * 3 + cell_height / 4);
+						break;
+					case 4:
+						if (_ui._selectLeftUI == 6 && cell_width > CELL_WIDTH) {
+							_tile._houses[_tileMap[i][j].tileNum][TILESIZE_OPEN]
+								->Render(GetMemDC(), left,
+									top - cell_height - cell_height / 2 - cell_height / 4 - cell_height / 4,
+									cell_width + cell_width / 2 + cell_width / 8,
+									cell_height * 3 + cell_height / 4);
+						}
+						else
+							_tile._houses[_tileMap[i][j].tileNum][_tileSize]
+							->Render(GetMemDC(), left,
+								top - cell_height - cell_height / 2 - cell_height / 4 - cell_height / 4,
+								cell_width + cell_width / 2 + cell_width / 8,
+								cell_height * 3 + cell_height / 4);
+						break;
+					case 5:
+						if (_ui._selectLeftUI == 6 && cell_width > CELL_WIDTH) {
+							_tile._houses[_tileMap[i][j].tileNum][TILESIZE_OPEN]
+								->Render(GetMemDC(), left, top - cell_height,
+									cell_width + cell_width / 4,
+									cell_height * 2 + cell_height / 4);
+						}
+						else
+							_tile._houses[_tileMap[i][j].tileNum][_tileSize]
+							->Render(GetMemDC(), left, top - cell_height,
+								cell_width + cell_width / 4,
+								cell_height * 2 + cell_height / 4);
+						break;
+					case 6:
+						break;
 					}
-					else
-						_tile._houses[_tileMap[i][j].tileNum][_tileSize]
-							->Render(GetMemDC(), left, top - cell_height,
-								cell_width + cell_width / 4,
-								cell_height * 2);
+					
 					break;
 				case TILEKIND_BUSINESSES:
 					break;
@@ -956,7 +1147,7 @@ void Simtown::DrawUI()
 	TextOut(GetMemDC(), _ui._rcTownNameUI.left + 15,
 		_ui._rcTownNameUI.top + 5, str, strlen(str));
 
-	sprintf_s(str, "인구 : %d명", 0);
+	sprintf_s(str, "인구 : %d명", _population);
 	TextOut(GetMemDC(), _ui._rcPopulationUI[0].left,
 		_ui._rcPopulationUI[0].top + 5, str, strlen(str));
 
@@ -1048,10 +1239,50 @@ void Simtown::DrawTile(int left, int top)
 				0, 0, cell_width * 2, cell_height * 2);
 		break;
 	case TILEKIND_HOUSES:
-		_tile._houses[_currentTileNum][_tileSize]
+		switch (_currentTileNum)
+		{
+		case 0:		
+			_tile._houses[_currentTileNum][_tileSize]
 			->Render(GetMemDC(), left, top - cell_height,
 				cell_width + cell_width / 4,
 				cell_height * 2);
+			break;
+		case 1:
+
+			break;
+		case 2:
+			_tile._houses[_currentTileNum][_tileSize]
+				->Render(GetMemDC(), left, 
+					top - cell_height / 2 - cell_height / 4,
+					cell_width + cell_width / 4,
+					cell_height * 2);
+			break;
+		case 3:
+			_tile._houses[_currentTileNum][_tileSize]
+				->Render(GetMemDC(), left,
+					top - cell_height - cell_height / 2 - cell_height / 4 - cell_height / 8,
+					cell_width + cell_width / 2,
+					cell_height * 3 + cell_height / 4);
+			break;
+		case 4:
+			_tile._houses[_currentTileNum][_tileSize]
+				->Render(GetMemDC(), left,
+					top - cell_height - cell_height / 2 - cell_height / 4 - cell_height / 4,
+					cell_width + cell_width / 2 + cell_width / 8,
+					cell_height * 3 + cell_height / 4);
+			break;
+		case 5:
+			_tile._houses[_currentTileNum][_tileSize]
+				->Render(GetMemDC(), left, top - cell_height,
+					cell_width + cell_width / 4,
+					cell_height * 2 + cell_height / 4);
+			break;
+		case 6:
+			break;
+		default:
+			break;
+		}
+
 		break; 
 	case TILEKIND_BUSINESSES:
 		break;

@@ -92,6 +92,8 @@ private:
 	HFONT hfont;
 
 	bool _isClicked;
+
+	int _population;
 public:
 	Simtown();
 	~Simtown();

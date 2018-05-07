@@ -22,6 +22,9 @@ HRESULT MainGame::Init()
 	GameNode::Init();
 	isDebug = false;
 
+	IMAGE->AddImage("bg", "images/bg2.bmp", 0, 0,
+		WINSIZEX, WINSIZEY, false, RGB(255, 0, 255));
+
 	LoadSimtownImg();
 
 	//TestScene * test = new TestScene;
@@ -76,6 +79,8 @@ void MainGame::Render()
 	PatBlt(GetMemDC(), 0, 0, WINSIZEX, WINSIZEY, WHITENESS);
 	//=================================================
 	{
+		IMAGE->Render("bg", GetMemDC(), 0, 0);
+
 		SCENE->Render();
 
 #ifdef SUBWINOPEN
@@ -118,21 +123,91 @@ void MainGame::LoadTile()
 
 void MainGame::LoadBuilding()
 {
+	LoadHouses();
+	LoadCommunityBuildings();
+	LoadBusinesses();
+	LoadFunPlaces();
+}
+
+void MainGame::LoadHouses()
+{
 	IMAGE->AddImage("houses_adobe_house_open",
 		"images/houses/open/adobe_house.bmp", 0, 0,
-		CELL_WIDTH * 2, CELL_HEIGHT * 2, true, RGB(255, 0, 255));
-
+		CELL_WIDTH + 50, CELL_HEIGHT * 2, true, RGB(255, 0, 255));
 	IMAGE->AddImage("houses_adobe_house_big",
 		"images/houses/big/adobe_house.bmp", 0, 0,
 		CELL_WIDTH + 50, CELL_HEIGHT * 2, true, RGB(255, 0, 255));
-	
 	IMAGE->AddImage("houses_adobe_house_mid",
 		"images/houses/mid/adobe_house.bmp", 0, 0,
 		CELL_WIDTH / 2 + 25, CELL_HEIGHT, true, RGB(255, 0, 255));
-
 	IMAGE->AddImage("houses_adobe_house_small",
 		"images/houses/small/adobe_house.bmp", 0, 0,
 		CELL_WIDTH / 4 + 12.5, CELL_HEIGHT / 2, true, RGB(255, 0, 255));
+	
+	IMAGE->AddImage("houses_ranch_house_open",
+		"images/houses/open/ranch_house.bmp", 0, 0,
+		CELL_WIDTH + 50, CELL_HEIGHT * 2, true, RGB(255, 0, 255));
+	IMAGE->AddImage("houses_ranch_house_big",
+		"images/houses/big/ranch_house.bmp", 0, 0,
+		CELL_WIDTH + 50, CELL_HEIGHT * 2, true, RGB(255, 0, 255));
+	IMAGE->AddImage("houses_ranch_house_mid",
+		"images/houses/mid/ranch_house.bmp", 0, 0,
+		CELL_WIDTH / 2 + 25, CELL_HEIGHT, true, RGB(255, 0, 255));
+	IMAGE->AddImage("houses_ranch_house_small",
+		"images/houses/small/ranch_house.bmp", 0, 0,
+		CELL_WIDTH / 4 + 12.5, CELL_HEIGHT / 2, true, RGB(255, 0, 255));
+
+	IMAGE->AddImage("houses_apartment_open",
+		"images/houses/open/apartment.bmp", 0, 0,
+		CELL_WIDTH + 100, CELL_HEIGHT * 3 + 25, true, RGB(255, 0, 255));
+	IMAGE->AddImage("houses_apartment_big",
+		"images/houses/big/apartment.bmp", 0, 0,
+		CELL_WIDTH + 100, CELL_HEIGHT * 3 + 25, true, RGB(255, 0, 255));
+	IMAGE->AddImage("houses_apartment_mid",
+		"images/houses/mid/apartment.bmp", 0, 0,
+		CELL_WIDTH / 2 + 50, CELL_HEIGHT / 2 * 3 + 12.5, true, RGB(255, 0, 255));
+	IMAGE->AddImage("houses_apartment_small",
+		"images/houses/small/apartment.bmp", 0, 0,
+		CELL_WIDTH / 4 + 25, CELL_HEIGHT / 4 * 3 + 6.25, true, RGB(255, 0, 255));
+
+	IMAGE->AddImage("houses_victorian_house_open",
+		"images/houses/open/victorian_house.bmp", 0, 0,
+		CELL_WIDTH + CELL_WIDTH / 2 + CELL_WIDTH / 8, CELL_HEIGHT * 3 + CELL_HEIGHT / 4, true, RGB(255, 0, 255));
+	IMAGE->AddImage("houses_victorian_house_big",
+		"images/houses/big/victorian_house.bmp", 0, 0,
+		CELL_WIDTH + CELL_WIDTH / 2 + CELL_WIDTH / 8, CELL_HEIGHT * 3 + CELL_HEIGHT / 4, true, RGB(255, 0, 255));
+	IMAGE->AddImage("houses_victorian_house_mid",
+		"images/houses/mid/victorian_house.bmp", 0, 0,
+		CELL_WIDTH / 2 + CELL_WIDTH / 4 + CELL_WIDTH / 16, CELL_HEIGHT / 2 * 3 + CELL_HEIGHT / 8, true, RGB(255, 0, 255));
+	IMAGE->AddImage("houses_victorian_house_small",
+		"images/houses/small/victorian_house.bmp", 0, 0,
+		CELL_WIDTH / 4 + CELL_WIDTH / 8 + CELL_WIDTH / 32, CELL_HEIGHT / 4 * 3 + CELL_HEIGHT / 16, true, RGB(255, 0, 255));
+
+	IMAGE->AddImage("houses_cottage_open",
+		"images/houses/open/cottage.bmp", 0, 0,
+		CELL_WIDTH + CELL_WIDTH / 4, CELL_HEIGHT * 2 + CELL_HEIGHT / 4, true, RGB(255, 0, 255));
+	IMAGE->AddImage("houses_cottage_big",
+		"images/houses/big/cottage.bmp", 0, 0,
+		CELL_WIDTH + CELL_WIDTH / 4, CELL_HEIGHT * 2 + CELL_HEIGHT / 4, true, RGB(255, 0, 255));
+	IMAGE->AddImage("houses_cottage_mid",
+		"images/houses/mid/cottage.bmp", 0, 0,
+		CELL_WIDTH / 2 + CELL_WIDTH / 8, CELL_HEIGHT + CELL_HEIGHT / 8, true, RGB(255, 0, 255));
+	IMAGE->AddImage("houses_cottage_small",
+		"images/houses/small/cottage.bmp", 0, 0,
+		CELL_WIDTH / 4 + CELL_WIDTH / 16, CELL_HEIGHT / 2 + CELL_HEIGHT / 16, true, RGB(255, 0, 255));
+
+}
+
+void MainGame::LoadCommunityBuildings()
+{
+}
+
+void MainGame::LoadBusinesses()
+{
+}
+
+void MainGame::LoadFunPlaces()
+{
 }
 
 void MainGame::LoadUI()
