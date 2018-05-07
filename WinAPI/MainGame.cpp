@@ -258,6 +258,25 @@ void MainGame::LoadBusinesses()
 
 void MainGame::LoadFunPlaces()
 {
+	IMAGE->AddImage("fun_places_video_arcade_big",
+		"images/fun places/big/video_arcade.bmp", 0, 0,
+		CELL_WIDTH + CELL_WIDTH / 8, CELL_HEIGHT * 2, true, RGB(255, 0, 255));
+	IMAGE->AddImage("fun_places_video_arcade_mid",
+		"images/fun places/mid/video_arcade.bmp", 0, 0,
+		CELL_WIDTH / 2 + CELL_WIDTH / 16, CELL_HEIGHT, true, RGB(255, 0, 255));
+	IMAGE->AddImage("fun_places_video_arcade_small",
+		"images/fun places/small/video_arcade.bmp", 0, 0,
+		CELL_WIDTH / 4 + CELL_WIDTH / 32, CELL_HEIGHT / 2, true, RGB(255, 0, 255));
+
+	IMAGE->AddImage("fun_places_bowling_alley_big",
+		"images/fun places/big/bowling_alley.bmp", 0, 0,
+		CELL_WIDTH, CELL_HEIGHT * 2, true, RGB(255, 0, 255));
+	IMAGE->AddImage("fun_places_bowling_alley_mid",
+		"images/fun places/mid/bowling_alley.bmp", 0, 0,
+		CELL_WIDTH / 2, CELL_HEIGHT, true, RGB(255, 0, 255));
+	IMAGE->AddImage("fun_places_bowling_alley_small",
+		"images/fun places/small/bowling_alley.bmp", 0, 0,
+		CELL_WIDTH / 4, CELL_HEIGHT / 2, true, RGB(255, 0, 255));
 }
 
 void MainGame::LoadUI()

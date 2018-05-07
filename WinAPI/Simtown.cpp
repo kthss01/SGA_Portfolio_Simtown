@@ -146,6 +146,10 @@ void Simtown::Update()
 	}
 
 	if (INPUT->GetKey(VK_LBUTTON)) {
+
+	}
+
+	if (INPUT->GetKeyDown(VK_LBUTTON)) {
 		// tile Select
 		{
 			if (g_ptMouse.x > 100
@@ -213,9 +217,7 @@ void Simtown::Update()
 				}
 			}
 		}
-	}
 
-	if (INPUT->GetKeyDown(VK_LBUTTON)) {
 		// ui Select
 		{
 			// top ui
@@ -618,6 +620,20 @@ void Simtown::FindTileImg()
 	_tile._businesses[8][TILESIZE_SMALL] =
 		IMAGE->FindImage("businesses_pet_store_small");
 
+	_tile._fun_places[0][TILESIZE_BIG] =
+		IMAGE->FindImage("fun_places_video_arcade_big");
+	_tile._fun_places[0][TILESIZE_MID] =
+		IMAGE->FindImage("fun_places_video_arcade_mid");
+	_tile._fun_places[0][TILESIZE_SMALL] =
+		IMAGE->FindImage("fun_places_video_arcade_small");
+
+	_tile._fun_places[1][TILESIZE_BIG] =
+		IMAGE->FindImage("fun_places_bowling_alley_big");
+	_tile._fun_places[1][TILESIZE_MID] =
+		IMAGE->FindImage("fun_places_bowling_alley_mid");
+	_tile._fun_places[1][TILESIZE_SMALL] =
+		IMAGE->FindImage("fun_places_bowling_alley_small");
+
 	_tile._tile[0][TILESIZE_BIG] =
 		IMAGE->FindImage("road_big");
 	_tile._tile[0][TILESIZE_MID] =
@@ -858,8 +874,57 @@ void Simtown::SelectTile()
 		}
 		break;
 	case TILEKIND_COMMUNITYBUILDINS:
+		switch (_tileMap[_isoX][_isoY].tileNum)
+		{
+		case 0:
+			break;
+		case 1:
+			break;
+		case 2:
+			break;
+		case 3:
+			break;
+		case 4:
+			break;
+		case 5:
+			break;
+		case 6:
+			break;
+		}
 		break;
 	case TILEKIND_FUNPLACES:
+		switch (_tileMap[_isoX][_isoY].tileNum)
+		{
+		case 0:
+			if (_isoY - 1 < 0 ||
+				_tileMap[_isoX][_isoY - 1].isSelected) {
+				_tileMap[_isoX][_isoY].isStartDraw = false;
+				return;
+			}
+
+			_tileMap[_isoX][_isoY].isSelected = true;
+			_tileMap[_isoX][_isoY - 1].isSelected = true;
+			break;
+		case 1:
+			if (_tileMap[_isoX][_isoY - 1].isSelected) {
+				_tileMap[_isoX][_isoY].isStartDraw = false;
+				return;
+			}
+
+			_tileMap[_isoX][_isoY].isSelected = true;
+			break;
+		case 2:
+			break;
+		case 3:
+			break;
+		case 4:
+			break;
+		case 5:
+			break;
+		case 6:
+			break;
+		}
+
 		break;
 	}
 
@@ -1075,8 +1140,55 @@ void Simtown::DeleteTile()
 		}
 		break;
 	case TILEKIND_COMMUNITYBUILDINS:
+		switch (_tileMap[_isoX][_isoY].tileNum)
+		{
+		case 0:
+			break;
+		case 1:
+			break;
+		case 2:
+			break;
+		case 3:
+			break;
+		case 4:
+			break;
+		case 5:
+			break;
+		case 6:
+			break;
+		}
 		break;
 	case TILEKIND_FUNPLACES:
+		switch (_tileMap[_isoX][_isoY].tileNum)
+		{
+		case 0:
+			if (_isoY - 1 < 0) {
+				_tileMap[_isoX][_isoY].isStartDraw = true;
+				return;
+			}
+
+			_tileMap[_isoX][_isoY].isSelected = false;
+			_tileMap[_isoX][_isoY - 1].isSelected = false;
+			break;
+		case 1:
+			if (_isoY - 1 < 0) {
+				_tileMap[_isoX][_isoY].isStartDraw = true;
+				return;
+			}
+
+			_tileMap[_isoX][_isoY].isSelected = false;
+			break;
+		case 2:
+			break;
+		case 3:
+			break;
+		case 4:
+			break;
+		case 5:
+			break;
+		case 6:
+			break;
+		}
 		break;
 	}
 
@@ -1291,8 +1403,51 @@ void Simtown::DrawTileMap()
 					}
 					break;
 				case TILEKIND_COMMUNITYBUILDINS:
+					switch (_tileMap[i][j].tileNum)
+					{
+					case 0:
+						break;
+					case 1:
+						break;
+					case 2:
+						break;
+					case 3:
+						break;
+					case 4:
+						break;
+					case 5:
+						break;
+					case 6:
+						break;
+					}
 					break;
 				case TILEKIND_FUNPLACES:
+					switch (_tileMap[i][j].tileNum)
+					{
+					case 0:
+						_tile._fun_places[_tileMap[i][j].tileNum][_tileSize]
+							->Render(GetMemDC(), left, top - cell_height - cell_height / 16,
+								cell_width + cell_width / 8,
+								cell_height * 2);
+						break;
+					case 1:
+						_tile._fun_places[_tileMap[i][j].tileNum][_tileSize]
+							->Render(GetMemDC(), left, top - cell_height,
+								cell_width,
+								cell_height * 2);
+						break;
+					case 2:
+						break;
+					case 3:
+						break;
+					case 4:
+						break;
+					case 5:
+						break;
+					case 6:
+						break;
+					}
+
 					break;
 				}
 			}
@@ -1624,6 +1779,7 @@ void Simtown::DrawTile(int left, int top)
 		switch (_currentTileNum)
 		{
 		case 0:
+
 			break;
 		case 1:
 			break;
@@ -1643,8 +1799,16 @@ void Simtown::DrawTile(int left, int top)
 		switch (_currentTileNum)
 		{
 		case 0:
+			_tile._fun_places[_currentTileNum][_tileSize]
+				->Render(GetMemDC(), left, top - cell_height - cell_height / 16,
+					cell_width + cell_width / 8,
+					cell_height * 2);
 			break;
 		case 1:
+			_tile._fun_places[_currentTileNum][_tileSize]
+				->Render(GetMemDC(), left, top - cell_height,
+					cell_width,
+					cell_height * 2);
 			break;
 		case 2:
 			break;
@@ -1951,7 +2115,11 @@ int Simtown::MakeRoad(int i, int j)
 			}
 			// 위 타일이 막혀있을 때
 			if (!isSame[1] && isClicked[1]) {
-				frameX = 10;
+				// 오른 타일이 있을 때
+				if (isSame[2])
+					frameX = 11;
+				else
+					frameX = 10;
 			}
 		}
 		// 오른 타일 있을 때
@@ -1971,7 +2139,7 @@ int Simtown::MakeRoad(int i, int j)
 		}
 		// 위 타일이 막혀있을 때
 		if (!isSame[1] && isClicked[1] && 
-			frameX != 10 && frameX != 6) {
+			frameX != 11 && frameX != 6 && frameX != 10) {
 			frameX = 4;
 		}
 	}
