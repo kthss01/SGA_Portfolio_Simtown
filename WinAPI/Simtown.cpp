@@ -57,11 +57,11 @@ void Simtown::Update()
 		{
 		case TILESIZE_SMALL:
 			_startX -= 80;
-			_startY -= 495;
+			_startY -= 850;
 			break;
 		case TILESIZE_MID:
 			_startX -= 50;
-			_startY -= 330;
+			_startY -= 550;
 			break;
 		case TILESIZE_BIG:
 			break;
@@ -74,13 +74,13 @@ void Simtown::Update()
 		{
 		case TILESIZE_SMALL:
 			_startX -= 30;
-			_startY -= 165;
+			_startY -= 300;
 			break;
 		case TILESIZE_MID:
 			break;
 		case TILESIZE_BIG:
 			_startX += 50;
-			_startY += 330;
+			_startY += 550;
 			break;
 		}
 		_tileSize = TILESIZE_MID; 
@@ -93,11 +93,11 @@ void Simtown::Update()
 			break;
 		case TILESIZE_MID:
 			_startX += 30;
-			_startY += 165;
+			_startY += 300;
 			break;
 		case TILESIZE_BIG:
 			_startX += 80;
-			_startY += 495;
+			_startY += 850;
 			break;
 		}
 		_tileSize = TILESIZE_SMALL; 
@@ -109,7 +109,7 @@ void Simtown::Update()
 		radius_width = cell_width / 2;
 		radius_height = cell_height / 2;
 
-		_startY += 6;
+		_startY += 10;
 
 		if (cell_width > CELL_WIDTH2 + 24) {
 			_tileSize = TILESIZE_BIG;
@@ -126,7 +126,7 @@ void Simtown::Update()
 		radius_width = cell_width / 2;
 		radius_height = cell_height / 2;
 
-		_startY -= 6;
+		_startY -= 10;
 
 		if (cell_width > CELL_WIDTH2 + 24) {
 			_tileSize = TILESIZE_BIG;
@@ -137,6 +137,7 @@ void Simtown::Update()
 		else
 			_tileSize = TILESIZE_SMALL;
 	}
+	if (INPUT->GetKeyDown('C')) { _ui._selectLeftUI = 6; }
 
 	if (INPUT->GetKeyDown(VK_TAB)) {
 		_isDebug = !_isDebug;
@@ -813,10 +814,17 @@ void Simtown::DrawTileMap()
 							MakeRoad(i,j), 0, cell_width * 2, cell_height * 2);
 					break;
 				case TILEKIND_HOUSES:
-					_tile._houses[_tileMap[i][j].tileNum][_tileSize]
-						->Render(GetMemDC(), left, top - cell_height,
-							cell_width + cell_width / 4,
-							cell_height * 2);
+					if (_ui._selectLeftUI == 6 && cell_width > CELL_WIDTH) {
+						_tile._houses[_tileMap[i][j].tileNum][TILESIZE_OPEN]
+							->Render(GetMemDC(), left, top - cell_height,
+								cell_width + cell_width / 4,
+								cell_height * 2);
+					}
+					else
+						_tile._houses[_tileMap[i][j].tileNum][_tileSize]
+							->Render(GetMemDC(), left, top - cell_height,
+								cell_width + cell_width / 4,
+								cell_height * 2);
 					break;
 				case TILEKIND_BUSINESSES:
 					break;
