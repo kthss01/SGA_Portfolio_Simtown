@@ -500,7 +500,7 @@ void Simtown::FindImg()
 	_land = IMAGE->FindImage("land");
 	
 	FindUIImg();
-	FindBuildingImg();
+	FindTileImg();
 
 }
 
@@ -527,16 +527,30 @@ void Simtown::FindUIImg()
 	_ui._populationUI = IMAGE->FindImage("ui_population");
 }
 
-void Simtown::FindBuildingImg()
+void Simtown::FindTileImg()
 {
-	_building._houses[0][TILESIZE_BIG] =
+	_tile._houses[0][TILESIZE_BIG] =
 		IMAGE->FindImage("houses_adobe_house_big");
-	_building._houses[0][TILESIZE_MID] =
+	_tile._houses[0][TILESIZE_MID] =
 		IMAGE->FindImage("houses_adobe_house_mid");
-	_building._houses[0][TILESIZE_SMALL] =
+	_tile._houses[0][TILESIZE_SMALL] =
 		IMAGE->FindImage("houses_adobe_house_small");
-	_building._houses[0][TILESIZE_OPEN] =
+	_tile._houses[0][TILESIZE_OPEN] =
 		IMAGE->FindImage("houses_adobe_house_open");
+
+	_tile._tile[0][TILESIZE_BIG] =
+		IMAGE->FindImage("road_big");
+	_tile._tile[0][TILESIZE_MID] =
+		IMAGE->FindImage("road_mid");
+	_tile._tile[0][TILESIZE_SMALL] =
+		IMAGE->FindImage("road_mid");
+
+	_tile._tile[1][TILESIZE_BIG] =
+		IMAGE->FindImage("bike_path_big");
+	_tile._tile[1][TILESIZE_MID] =
+		IMAGE->FindImage("bike_path_mid");
+	_tile._tile[1][TILESIZE_SMALL] =
+		IMAGE->FindImage("bike_path_mid");
 }
 
 void Simtown::SelectTile()
@@ -545,12 +559,70 @@ void Simtown::SelectTile()
 	switch (_currentTileKind)
 	{
 	case TILEKIND_TILESETS:
+		switch (_currentTileNum)
+		{
+		case 0:
+			if (_isoX + 1 >= TILE_COUNT_X || _isoY - 1 < 0 ||
+				_tileMap[_isoX + 1][_isoY].isSelected ||
+				_tileMap[_isoX][_isoY - 1].isSelected ||
+				_tileMap[_isoX + 1][_isoY - 1].isSelected) {
+				_tileMap[_isoX][_isoY].isStartDraw = false;
+				return;
+			}
+
+			_tileMap[_isoX][_isoY].isSelected = true;
+			_tileMap[_isoX + 1][_isoY].isSelected = true;
+			_tileMap[_isoX][_isoY - 1].isSelected = true;
+			_tileMap[_isoX + 1][_isoY - 1].isSelected = true;
+			break;
+		case 1:
+			break;
+		case 2:
+			break;
+		case 3:
+			break;
+		case 4:
+			break;
+		case 5:
+			break;
+		case 6:
+			break;
+		case 7:
+			break;
+		case 8:
+			break;
+		case 9:
+			break;
+		case 10:
+			break;
+		case 11:
+			break;
+		case 12:
+			break;
+		case 13:
+			break;
+		case 14:
+			break;
+		case 15:
+			break;
+		case 16:
+			break;
+		case 17:
+			break;
+		case 18:
+			break;
+		case 19:
+			break;
+		case 20:
+			break;
+		}
 		break;
 	case TILEKIND_HOUSES:
 		switch (_currentTileNum)
 		{
 		case 0:
-			if (_tileMap[_isoX][_isoY - 1].isSelected) {
+			if (_isoY - 1 < 0 || 
+				_tileMap[_isoX][_isoY - 1].isSelected) {
 				_tileMap[_isoX][_isoY].isStartDraw = false;
 				return;
 			}
@@ -588,14 +660,72 @@ void Simtown::SelectTile()
 void Simtown::DeleteTile()
 {
 	// 선택된 타일에 따라 isSelect true 
-	switch (_currentTileKind)
+	switch (_tileMap[_isoX][_isoY].tileKind)
 	{
 	case TILEKIND_TILESETS:
-		break;
-	case TILEKIND_HOUSES:
-		switch (_currentTileNum)
+		switch (_tileMap[_isoX][_isoY].tileNum)
 		{
 		case 0:
+			if (_isoX + 1 >= TILE_COUNT_X || _isoY - 1 < 0) {
+				_tileMap[_isoX][_isoY].isStartDraw = true;
+				return;
+			}
+			_tileMap[_isoX][_isoY].isSelected = false;
+			_tileMap[_isoX + 1][_isoY].isSelected = false;
+			_tileMap[_isoX][_isoY - 1].isSelected = false;
+			_tileMap[_isoX + 1][_isoY - 1].isSelected = false;
+			break;
+		case 1:
+			break;
+		case 2:
+			break;
+		case 3:
+			break;
+		case 4:
+			break;
+		case 5:
+			break;
+		case 6:
+			break;
+		case 7:
+			break;
+		case 8:
+			break;
+		case 9:
+			break;
+		case 10:
+			break;
+		case 11:
+			break;
+		case 12:
+			break;
+		case 13:
+			break;
+		case 14:
+			break;
+		case 15:
+			break;
+		case 16:
+			break;
+		case 17:
+			break;
+		case 18:
+			break;
+		case 19:
+			break;
+		case 20:
+			break;
+		}
+		break;
+	case TILEKIND_HOUSES:
+		switch (_tileMap[_isoX][_isoY].tileNum)
+		{
+		case 0:
+			if (_isoY - 1 < 0) {
+				_tileMap[_isoX][_isoY].isStartDraw = true;
+				return;
+			}
+
 			_tileMap[_isoX][_isoY].isSelected = false;
 			_tileMap[_isoX][_isoY - 1].isSelected = false;
 			break;
@@ -620,11 +750,15 @@ void Simtown::DeleteTile()
 	case TILEKIND_FUNPLACES:
 		break;
 	}
+
+	_tileMap[_isoX][_isoY].tileKind = -1;
+	_tileMap[_isoX][_isoY].tileNum = -1;
 }
 
 void Simtown::DrawTileMap()
 {
 	_tileCnt = 0;
+	// land 그리기
 	for (int i = 0; i < TILE_COUNT_X; i++) {
 		for (int j = 0; j < TILE_COUNT_Y; j++) {
 			float left = _startX + (i * radius_width) - (j * radius_width);
@@ -638,25 +772,6 @@ void Simtown::DrawTileMap()
 			//IMAGE->Render("land_big", GetMemDC(), left, top);
 
 			_land->Render(GetMemDC(), left, top, cell_width, cell_height);
-			if (_tileMap[i][j].isStartDraw) {
-				switch (_tileMap[i][j].tileKind)
-				{
-				case TILEKIND_TILESETS:
-					break;
-				case TILEKIND_HOUSES:
-					_building._houses[_currentTileNum][_tileSize]
-						->Render(GetMemDC(), left, top - cell_height,
-							cell_width + cell_width / 4,
-							cell_height * 2);
-					break;
-				case TILEKIND_BUSINESSES:
-					break;
-				case TILEKIND_COMMUNITYBUILDINS:
-					break;
-				case TILEKIND_FUNPLACES:
-					break;
-				}
-			}
 			
 			_tileCnt++;
 
@@ -674,6 +789,41 @@ void Simtown::DrawTileMap()
 					//TextOut(GetMemDC(),
 					//	left + RADIUS_WIDTH / 2 + 8,
 					//	top + RADIUS_HEIGHT / 2 + 5, str, strlen(str));
+				}
+			}
+		}
+	}
+
+	// tile 그리기
+	for (int i = 0; i < TILE_COUNT_X; i++) {
+		for (int j = 0; j < TILE_COUNT_Y; j++) {
+			float left = _startX + (i * radius_width) - (j * radius_width);
+			float top = _startY + (i * radius_height) + (j * radius_height);
+
+			if (left + cell_width < WINSIZEX / 12 || left > WINSIZEX
+				|| top + cell_height < WINSIZEY / 18 || top > WINSIZEY - WINSIZEY / 7) continue;
+
+			if (_tileMap[i][j].isStartDraw) {
+				switch (_tileMap[i][j].tileKind)
+				{
+				case TILEKIND_TILESETS:
+					_tile._tile[_tileMap[i][j].tileNum][_tileSize]
+						->FrameRender(GetMemDC(), left,
+							top - cell_height / 2,
+							MakeRoad(i,j), 0, cell_width * 2, cell_height * 2);
+					break;
+				case TILEKIND_HOUSES:
+					_tile._houses[_tileMap[i][j].tileNum][_tileSize]
+						->Render(GetMemDC(), left, top - cell_height,
+							cell_width + cell_width / 4,
+							cell_height * 2);
+					break;
+				case TILEKIND_BUSINESSES:
+					break;
+				case TILEKIND_COMMUNITYBUILDINS:
+					break;
+				case TILEKIND_FUNPLACES:
+					break;
 				}
 			}
 		}
@@ -884,9 +1034,13 @@ void Simtown::DrawTile(int left, int top)
 	switch (_currentTileKind)
 	{
 	case TILEKIND_TILESETS:
+		_tile._tile[_currentTileNum][_tileSize]
+			->FrameRender(GetMemDC(), left, 
+				top - cell_height / 2,
+				0, 0, cell_width * 2, cell_height * 2);
 		break;
 	case TILEKIND_HOUSES:
-		_building._houses[_currentTileNum][_tileSize]
+		_tile._houses[_currentTileNum][_tileSize]
 			->Render(GetMemDC(), left, top - cell_height,
 				cell_width + cell_width / 4,
 				cell_height * 2);
@@ -969,8 +1123,253 @@ void Simtown::InitTile()
 		for (int j = 0; j < TILE_COUNT_Y; j++) {
 			_tileMap[i][j].isSelected = false;
 			_tileMap[i][j].isStartDraw = false;
+
+			_tileMap[i][j].tileKind = -1;
+			_tileMap[i][j].tileNum = -1;
 		}
 	}
+}
+
+int Simtown::MakeRoad(int i, int j)
+{
+	// 기본 이미지
+	int frameX = 0;
+
+	// check
+	bool isClicked[4];
+	bool isSame[4];
+
+	tagTile temp;
+	// left
+	if (i - 2 >= 0) {
+		temp = _tileMap[i - 2][j];
+		isSame[0] =
+			temp.tileKind == _tileMap[i][j].tileKind &&
+			temp.tileNum == _tileMap[i][j].tileNum &&
+			temp.tileKind != -1 ?
+			true : false;
+	}
+	else
+		isSame[0] = false;
+	if (i - 1 >= 0) {
+		temp = _tileMap[i - 1][j];
+		isClicked[0] = temp.isSelected;
+	}
+	else
+		isClicked[0] = true;
+	// top
+	if (j - 2 >= 0) {
+		temp = _tileMap[i][j - 2];
+		isSame[1] =
+			temp.tileKind == _tileMap[i][j].tileKind &&
+			temp.tileNum == _tileMap[i][j].tileNum &&
+			temp.tileKind != -1 ?
+			true : false;
+	}
+	else
+		isSame[1] = false;
+	if (j - 2 >= 0) {
+		temp = _tileMap[i][j - 2];
+		isClicked[1] = temp.isSelected;
+	}
+	else
+		isClicked[1] = true;
+	// right
+	if (i + 2 < TILE_COUNT_X) {
+		temp = _tileMap[i + 2][j];
+		isSame[2] =
+			temp.tileKind == _tileMap[i][j].tileKind &&
+			temp.tileNum == _tileMap[i][j].tileNum &&
+			temp.tileKind != -1 ?
+			true : false;
+	}
+	else
+		isSame[2] = false;
+	if (i + 2 < TILE_COUNT_X) {
+		temp = _tileMap[i + 2][j];
+		isClicked[2] = temp.isSelected;
+	}
+	else
+		isClicked[2] = true;
+	// bottom
+	if (j + 2 < TILE_COUNT_Y) {
+		temp = _tileMap[i][j + 2];
+		isSame[3] =
+			temp.tileKind == _tileMap[i][j].tileKind &&
+			temp.tileNum == _tileMap[i][j].tileNum &&
+			temp.tileKind != -1 ?
+			true : false;
+	}
+	else
+		isSame[3] = false;
+	if (j + 1 < TILE_COUNT_Y) {
+		temp = _tileMap[i][j + 1];
+		isClicked[3] = temp.isSelected;
+	}
+	else
+		isClicked[3] = true;
+	
+	// 왼 타일 있을 때
+	if(isSame[0]) {
+		frameX = 1;
+		// 위 타일 있을 때
+		if (isSame[1]) {
+			frameX = 14;
+			// 오른 타일이나 아래 타일이 있을 때
+			if (isSame[2] || isSame[3]) {
+				frameX = 2;
+				// 아래 타일이 막혀 있을 때
+				if (!isSame[3] && isClicked[3])
+					frameX = 14;
+			}
+			// 오른 타일이 막혀있을 때
+			if (!isSame[2] && isClicked[2]) {
+				frameX = 3;
+			}
+		}
+		// 아래 타일 있을 때
+		else if (isSame[3]) {
+			frameX = 11;
+			// 위 타일이나 오른 타일이 있을 때
+			if (isSame[1] || isSame[2]) {
+				frameX = 2;
+				// 위 타일이 막혀 있을 때
+				if (!isSame[1] && isClicked[1])
+					frameX = 11;
+			}
+			// 오른 타일이 막혀있을 때
+			if (!isSame[2] && isClicked[2]) {
+				frameX = 10;
+			}
+		}
+		// 오른 타일이 막혀있을 때
+		if (!isSame[2] && isClicked[2] &&
+			frameX != 3 && frameX != 10) {
+			frameX = 7;
+		}
+	}
+
+	// 위 타일 있을 때
+	if (isSame[1]) {
+		frameX = 0;
+		// 왼 타일 있을 때
+		if (isSame[0]) {
+			frameX = 13;
+			// 오른 타일이나 아래 타일이 있을 때
+			if (isSame[2] || isSame[3]) {
+				frameX = 2;
+				// 오른 타일이 막혀있을 때
+				if (!isSame[2] && isClicked[2])
+					frameX = 13;
+			}
+			// 아래 타일이 막혀있을 때
+			if (!isSame[3] && isClicked[3]) {
+				frameX = 3;
+			}
+		}
+		// 오른 타일 있을 때
+		else if (isSame[2]) {
+			frameX = 12;
+			// 왼 타일이나 아래 타일이 있을 때
+			if (isSame[0] || isSame[3]) {
+				frameX = 2;
+				// 왼 타일이 막혀있을 때
+				if(!isSame[0] && isClicked[0])
+					frameX = 12;
+			}
+			// 아래 타일이 막혀있을 때
+			if (!isSame[3] && isClicked[3]) {
+				frameX = 9;
+			}
+		}
+		// 아래 타일이 막혀있을 때
+		if (!isSame[3] && isClicked[3] &&
+			frameX != 3 && frameX != 9) {
+			frameX = 8;
+		}
+	}
+
+	// 오른 타일 있을 때
+	if (isSame[2]) {
+		frameX = 1;
+		// 위 타일 있을 때
+		if (isSame[1]) {
+			frameX = 14;
+			// 왼 타일이나 아래 타일이 있을 때
+			if (isSame[0] || isSame[3]) {
+				frameX = 2;
+				// 아래 타일이 막혀있을 때
+				if (!isSame[3] && isClicked[3])
+					frameX = 14;
+			}
+			// 왼 타일이 막혀있을 때
+			if (!isSame[0] && isClicked[0]) {
+				frameX = 9;
+			}
+		}
+		// 아래 타일 있을 때
+		else if (isSame[3]) {
+			frameX = 11;
+			// 왼 타일이나 위 타일이 있을 때
+			if (isSame[0] || isSame[1]) {
+				frameX = 2;
+				// 위 타일이 막혀있을 때
+				if (!isSame[1] && isClicked[1])
+					frameX = 11;
+			}
+			// 왼 타일이 막혀있을 때
+			if (!isSame[0] && isClicked[0]) {
+				frameX = 6;
+			}
+		}
+		// 왼 타일이 막혀있을 때
+		if (!isSame[0] && isClicked[0] &&
+			frameX != 9 && frameX != 6) {
+			frameX = 5;
+		}
+	}
+
+	// 아래 타일 있을 때
+	if (isSame[3]) {
+		frameX = 0;
+		// 왼 타일 있을 때
+		if (isSame[0]) {
+			frameX = 13;
+			// 위 타일이나 오른 타일이 있을 때
+			if (isSame[1] || isSame[2]) {
+				frameX = 2;
+				// 오른 타일이 막혀있을 때
+				if (!isSame[2] && isClicked[2])
+					frameX = 13;
+			}
+			// 위 타일이 막혀있을 때
+			if (!isSame[1] && isClicked[1]) {
+				frameX = 10;
+			}
+		}
+		// 오른 타일 있을 때
+		else if (isSame[2]) {
+			frameX = 12;
+			// 왼 타일이나 위 타일이 있을 때
+			if (isSame[0] || isSame[1]) {
+				frameX = 2;
+				// 왼 타일이 막혀있을 때
+				if (!isSame[0] && isClicked[0])
+					frameX = 12;
+			}
+			// 위 타일이 막혀있을 때
+			if (!isSame[1] && isClicked[1]) {
+				frameX = 6;
+			}
+		}
+		// 위 타일이 막혀있을 때
+		if (!isSame[1] && isClicked[1] && 
+			frameX != 10 && frameX != 6) {
+			frameX = 4;
+		}
+	}
+
+	return frameX;
 }
 
 void Simtown::PlaySong(int num)

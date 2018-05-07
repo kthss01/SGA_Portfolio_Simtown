@@ -13,15 +13,17 @@
 #define CELL_HEIGHT3 (CELL_HEIGHT / 4)
 
 // ÃÊ±â ÁÂÇ¥
-#define INIT_X 555
-#define INIT_Y -330
+#define INIT_X 530
+#define INIT_Y -800
 
-#define TILE_COUNT_X 1000
-#define TILE_COUNT_Y 1000
+#define TILE_COUNT_X 100
+#define TILE_COUNT_Y 100
 
 struct tagTile {
 	int tileKind;
 	int tileNum;
+
+	int tileFrameX;
 
 	bool isStartDraw;
 	bool isSelected;

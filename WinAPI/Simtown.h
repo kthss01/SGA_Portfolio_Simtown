@@ -48,7 +48,8 @@ enum TileSize {
 	TILESIZE_END
 };
 
-struct tagBuildingInfo {
+struct tagTileInfo {
+	Image * _tile[21][3];
 	Image * _houses[14][TILESIZE_END];
 };
 
@@ -83,7 +84,7 @@ private:
 
 	tagUIInfo _ui;
 
-	tagBuildingInfo _building;
+	tagTileInfo _tile;
 
 	TileKind _currentTileKind;
 	int _currentTileNum;
@@ -106,7 +107,7 @@ public:
 
 	void FindImg();
 	void FindUIImg();
-	void FindBuildingImg();
+	void FindTileImg();
 
 	void SelectTile();
 	void DeleteTile();
@@ -123,6 +124,7 @@ public:
 	void LoadTile();
 	void InitTile();
 
+	int MakeRoad(int isoX, int isoY);
 	void PlaySong(int num);
 };
 

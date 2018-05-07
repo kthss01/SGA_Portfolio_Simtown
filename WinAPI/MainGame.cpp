@@ -104,6 +104,16 @@ void MainGame::LoadTile()
 {
 	IMAGE->AddImage("land", "images/tile/land_big.bmp", 0, 0,
 		CELL_WIDTH, CELL_HEIGHT, true, RGB(255, 0, 255));
+
+	IMAGE->AddImage("road_big", "images/tile/road_big_15x1.bmp", 0, 0,
+		CELL_WIDTH * 15 * 2, CELL_HEIGHT * 1 * 2, 15, 1, true, RGB(255, 0, 255));
+	IMAGE->AddImage("road_mid", "images/tile/road_mid_15x1.bmp", 0, 0,
+		CELL_WIDTH * 15, CELL_HEIGHT * 1, 15, 1, true, RGB(255, 0, 255));
+
+	IMAGE->AddImage("bike_path_big", "images/tile/bike_path_big_11x4.bmp", 0, 0,
+		CELL_WIDTH * 11, CELL_HEIGHT * 4, 11, 4, true, RGB(255, 0, 255));
+	IMAGE->AddImage("bike_path_mid", "images/tile/bike_path_mid_22x1.bmp", 0, 0,
+		CELL_WIDTH2 * 22, CELL_HEIGHT2, 22, 1, true, RGB(255, 0, 255));
 }
 
 void MainGame::LoadBuilding()
