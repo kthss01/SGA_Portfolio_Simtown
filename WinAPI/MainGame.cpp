@@ -204,6 +204,56 @@ void MainGame::LoadCommunityBuildings()
 
 void MainGame::LoadBusinesses()
 {
+	IMAGE->AddImage("businesses_hardware_store_big",
+		"images/businesses/big/hardware_store.bmp", 0, 0,
+		CELL_WIDTH, CELL_HEIGHT * 2, true, RGB(255, 0, 255));
+	IMAGE->AddImage("businesses_hardware_store_mid",
+		"images/businesses/mid/hardware_store.bmp", 0, 0,
+		CELL_WIDTH / 2, CELL_HEIGHT, true, RGB(255, 0, 255));
+	IMAGE->AddImage("businesses_hardware_store_small",
+		"images/businesses/small/hardware_store.bmp", 0, 0,
+		CELL_WIDTH / 4, CELL_HEIGHT / 2, true, RGB(255, 0, 255));
+
+	IMAGE->AddImage("businesses_pizza_parlor_big",
+		"images/businesses/big/pizza_parlor.bmp", 0, 0,
+		CELL_WIDTH, CELL_HEIGHT * 2, true, RGB(255, 0, 255));
+	IMAGE->AddImage("businesses_pizza_parlor_mid",
+		"images/businesses/mid/pizza_parlor.bmp", 0, 0,
+		CELL_WIDTH / 2, CELL_HEIGHT, true, RGB(255, 0, 255));
+	IMAGE->AddImage("businesses_pizza_parlor_small",
+		"images/businesses/small/pizza_parlor.bmp", 0, 0,
+		CELL_WIDTH / 4, CELL_HEIGHT / 2, true, RGB(255, 0, 255));
+
+	IMAGE->AddImage("businesses_chinese_restaurant_big",
+		"images/businesses/big/chinese_restaurant.bmp", 0, 0,
+		CELL_WIDTH, CELL_HEIGHT * 2, true, RGB(255, 0, 255));
+	IMAGE->AddImage("businesses_chinese_restaurant_mid",
+		"images/businesses/mid/chinese_restaurant.bmp", 0, 0,
+		CELL_WIDTH / 2, CELL_HEIGHT, true, RGB(255, 0, 255));
+	IMAGE->AddImage("businesses_chinese_restaurant_small",
+		"images/businesses/small/chinese_restaurant.bmp", 0, 0,
+		CELL_WIDTH / 4, CELL_HEIGHT / 2, true, RGB(255, 0, 255));
+
+	IMAGE->AddImage("businesses_burger_joint_big",
+		"images/businesses/big/burger_joint.bmp", 0, 0,
+		CELL_WIDTH, CELL_HEIGHT * 2, true, RGB(255, 0, 255));
+	IMAGE->AddImage("businesses_burger_joint_mid",
+		"images/businesses/mid/burger_joint.bmp", 0, 0,
+		CELL_WIDTH / 2, CELL_HEIGHT, true, RGB(255, 0, 255));
+	IMAGE->AddImage("businesses_burger_joint_small",
+		"images/businesses/small/burger_joint.bmp", 0, 0,
+		CELL_WIDTH / 4, CELL_HEIGHT / 2, true, RGB(255, 0, 255));
+
+	IMAGE->AddImage("businesses_pet_store_big",
+		"images/businesses/big/pet_store.bmp", 0, 0,
+		CELL_WIDTH, CELL_HEIGHT * 2, true, RGB(255, 0, 255));
+	IMAGE->AddImage("businesses_pet_store_mid",
+		"images/businesses/mid/pet_store.bmp", 0, 0,
+		CELL_WIDTH / 2, CELL_HEIGHT, true, RGB(255, 0, 255));
+	IMAGE->AddImage("businesses_pet_store_small",
+		"images/businesses/small/pet_store.bmp", 0, 0,
+		CELL_WIDTH / 4, CELL_HEIGHT / 2, true, RGB(255, 0, 255));
+
 }
 
 void MainGame::LoadFunPlaces()

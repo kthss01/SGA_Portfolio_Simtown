@@ -51,6 +51,7 @@ enum TileSize {
 struct tagTileInfo {
 	Image * _tile[21][3];
 	Image * _houses[14][TILESIZE_END];
+	Image * _businesses[14][3];
 };
 
 enum TileKind {

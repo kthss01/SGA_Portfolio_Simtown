@@ -280,17 +280,23 @@ void Simtown::Update()
 			if (PtInRect(&_ui._rcPageDownUI, g_ptMouse)) {
 				if (_ui._selectLeftUI == 0 || _ui._selectLeftUI == 1 || _ui._selectLeftUI == 2) {
 					SOUND->Play("tile_select");
-					if (_ui._selectLeftUI == 0 && _ui._pageNum <= 1)
+					if (_ui._selectLeftUI == 0 && _ui._pageNum <= 1) {
+						_currentTileNum += 7;
 						_ui._pageNum++;
-					else if (_ui._pageNum <= 0)
+					}
+					else if (_ui._pageNum <= 0) {
+						_currentTileNum += 7;
 						_ui._pageNum++;
+					}
 				}
 			}
 			if (PtInRect(&_ui._rcPageUpUI, g_ptMouse)) {
 				if (_ui._selectLeftUI == 0 || _ui._selectLeftUI == 1 || _ui._selectLeftUI == 2) {
 					SOUND->Play("tile_select");
-					if (_ui._pageNum >= 1)
+					if (_ui._pageNum >= 1) {
+						_currentTileNum -= 7;
 						_ui._pageNum--;
+					}
 				}
 			}
 		}
@@ -577,6 +583,41 @@ void Simtown::FindTileImg()
 	_tile._houses[5][TILESIZE_OPEN] =
 		IMAGE->FindImage("houses_cottage_open");
 
+	_tile._businesses[0][TILESIZE_BIG] =
+		IMAGE->FindImage("businesses_hardware_store_big");
+	_tile._businesses[0][TILESIZE_MID] =
+		IMAGE->FindImage("businesses_hardware_store_mid");
+	_tile._businesses[0][TILESIZE_SMALL] =
+		IMAGE->FindImage("businesses_hardware_store_small");
+
+	_tile._businesses[1][TILESIZE_BIG] =
+		IMAGE->FindImage("businesses_pizza_parlor_big");
+	_tile._businesses[1][TILESIZE_MID] =
+		IMAGE->FindImage("businesses_pizza_parlor_mid");
+	_tile._businesses[1][TILESIZE_SMALL] =
+		IMAGE->FindImage("businesses_pizza_parlor_small");
+
+	_tile._businesses[3][TILESIZE_BIG] =
+		IMAGE->FindImage("businesses_chinese_restaurant_big");
+	_tile._businesses[3][TILESIZE_MID] =
+		IMAGE->FindImage("businesses_chinese_restaurant_mid");
+	_tile._businesses[3][TILESIZE_SMALL] =
+		IMAGE->FindImage("businesses_chinese_restaurant_small");
+
+	_tile._businesses[5][TILESIZE_BIG] =
+		IMAGE->FindImage("businesses_burger_joint_big");
+	_tile._businesses[5][TILESIZE_MID] =
+		IMAGE->FindImage("businesses_burger_joint_mid");
+	_tile._businesses[5][TILESIZE_SMALL] =
+		IMAGE->FindImage("businesses_burger_joint_small");
+
+	_tile._businesses[8][TILESIZE_BIG] =
+		IMAGE->FindImage("businesses_pet_store_big");
+	_tile._businesses[8][TILESIZE_MID] =
+		IMAGE->FindImage("businesses_pet_store_mid");
+	_tile._businesses[8][TILESIZE_SMALL] =
+		IMAGE->FindImage("businesses_pet_store_small");
+
 	_tile._tile[0][TILESIZE_BIG] =
 		IMAGE->FindImage("road_big");
 	_tile._tile[0][TILESIZE_MID] =
@@ -727,9 +768,94 @@ void Simtown::SelectTile()
 			break;
 		case 6:
 			break;
+		case 7:
+			break;
+		case 8:
+			break;
+		case 9:
+			break;
+		case 10:
+			break;
+		case 11:
+			break;
+		case 12:
+			break;
+		case 13:
+			break;
 		}
 		break;
 	case TILEKIND_BUSINESSES:
+		switch (_currentTileNum)
+		{
+		case 0:
+			if (_isoX + 1 > TILE_COUNT_X ||
+				_tileMap[_isoX + 1][_isoY].isSelected) {
+				_tileMap[_isoX][_isoY].isStartDraw = false;
+				return;
+			}
+
+			_tileMap[_isoX][_isoY].isSelected = true;
+			_tileMap[_isoX + 1][_isoY].isSelected = true;
+			break;
+		case 1:
+			if (_isoX + 1 > TILE_COUNT_X ||
+				_tileMap[_isoX + 1][_isoY].isSelected) {
+				_tileMap[_isoX][_isoY].isStartDraw = false;
+				return;
+			}
+
+			_tileMap[_isoX][_isoY].isSelected = true;
+			_tileMap[_isoX + 1][_isoY].isSelected = true;
+			break;
+		case 2:
+			break;
+		case 3:
+			if (_isoX + 1 > TILE_COUNT_X ||
+				_tileMap[_isoX + 1][_isoY].isSelected) {
+				_tileMap[_isoX][_isoY].isStartDraw = false;
+				return;
+			}
+
+			_tileMap[_isoX][_isoY].isSelected = true;
+			_tileMap[_isoX + 1][_isoY].isSelected = true;
+			break;
+		case 4:
+			break;
+		case 5:
+			if (_isoX + 1 > TILE_COUNT_X ||
+				_tileMap[_isoX + 1][_isoY].isSelected) {
+				_tileMap[_isoX][_isoY].isStartDraw = false;
+				return;
+			}
+
+			_tileMap[_isoX][_isoY].isSelected = true;
+			_tileMap[_isoX + 1][_isoY].isSelected = true;
+			break;
+		case 6:
+			break;
+		case 7:
+			break;
+		case 8:
+			if (_isoX + 1 > TILE_COUNT_X ||
+				_tileMap[_isoX + 1][_isoY].isSelected) {
+				_tileMap[_isoX][_isoY].isStartDraw = false;
+				return;
+			}
+
+			_tileMap[_isoX][_isoY].isSelected = true;
+			_tileMap[_isoX + 1][_isoY].isSelected = true;
+			break;
+		case 9:
+			break;
+		case 10:
+			break;
+		case 11:
+			break;
+		case 12:
+			break;
+		case 13:
+			break;
+		}
 		break;
 	case TILEKIND_COMMUNITYBUILDINS:
 		break;
@@ -864,9 +990,89 @@ void Simtown::DeleteTile()
 			break;
 		case 6:
 			break;
+		case 7:
+			break;
+		case 8:
+			break;
+		case 9:
+			break;
+		case 10:
+			break;
+		case 11:
+			break;
+		case 12:
+			break;
+		case 13:
+			break;
 		}
 		break;
 	case TILEKIND_BUSINESSES:
+		switch (_currentTileNum)
+		{
+		case 0:
+			if (_isoX + 1 > TILE_COUNT_X) {
+				_tileMap[_isoX][_isoY].isStartDraw = true;
+				return;
+			}
+
+			_tileMap[_isoX][_isoY].isSelected = false;
+			_tileMap[_isoX + 1][_isoY].isSelected = false;
+			break;
+		case 1:
+			if (_isoX + 1 > TILE_COUNT_X) {
+				_tileMap[_isoX][_isoY].isStartDraw = true;
+				return;
+			}
+
+			_tileMap[_isoX][_isoY].isSelected = false;
+			_tileMap[_isoX + 1][_isoY].isSelected = false;
+			break;
+		case 2:
+			break;
+		case 3:
+			if (_isoX + 1 > TILE_COUNT_X) {
+				_tileMap[_isoX][_isoY].isStartDraw = true;
+				return;
+			}
+
+			_tileMap[_isoX][_isoY].isSelected = false;
+			_tileMap[_isoX + 1][_isoY].isSelected = false;
+			break;
+		case 4:
+			break;
+		case 5:
+			if (_isoX + 1 > TILE_COUNT_X) {
+				_tileMap[_isoX][_isoY].isStartDraw = true;
+				return;
+			}
+
+			_tileMap[_isoX][_isoY].isSelected = false;
+			_tileMap[_isoX + 1][_isoY].isSelected = false;
+			break;
+		case 6:
+			break;
+		case 7:
+			break;
+		case 8:
+			if (_isoX + 1 > TILE_COUNT_X) {
+				_tileMap[_isoX][_isoY].isStartDraw = true;
+				return;
+			}
+
+			_tileMap[_isoX][_isoY].isSelected = false;
+			_tileMap[_isoX + 1][_isoY].isSelected = false;
+			break;
+		case 9:
+			break;
+		case 10:
+			break;
+		case 11:
+			break;
+		case 12:
+			break;
+		case 13:
+			break;
+		}
 		break;
 	case TILEKIND_COMMUNITYBUILDINS:
 		break;
@@ -1014,10 +1220,75 @@ void Simtown::DrawTileMap()
 						break;
 					case 6:
 						break;
+					case 7:
+						break;
+					case 8:
+						break;
+					case 9:
+						break;
+					case 10:
+						break;
+					case 11:
+						break;
+					case 12:
+						break;
+					case 13:
+						break;
 					}
 					
 					break;
 				case TILEKIND_BUSINESSES:
+					switch (_tileMap[i][j].tileNum)
+					{
+					case 0:
+						_tile._businesses[_tileMap[i][j].tileNum][_tileSize]
+							->Render(GetMemDC(), left, top - cell_height + cell_height / 16,
+								cell_width,
+								cell_height * 2);
+						break;
+					case 1:
+						_tile._businesses[_tileMap[i][j].tileNum][_tileSize]
+							->Render(GetMemDC(), left, top - cell_height + cell_height / 16,
+								cell_width,
+								cell_height * 2);
+						break;
+					case 2:
+						break;
+					case 3:
+						_tile._businesses[_tileMap[i][j].tileNum][_tileSize]
+							->Render(GetMemDC(), left, top - cell_height,
+								cell_width,
+								cell_height * 2);
+						break;
+					case 4:
+						break;
+					case 5:
+						_tile._businesses[_tileMap[i][j].tileNum][_tileSize]
+							->Render(GetMemDC(), left, top - cell_height + cell_height / 16,
+								cell_width,
+								cell_height * 2);
+						break;
+					case 6:
+						break;
+					case 7:
+						break;
+					case 8:
+						_tile._businesses[_tileMap[i][j].tileNum][_tileSize]
+							->Render(GetMemDC(), left, top - cell_height + cell_height / 16,
+								cell_width,
+								cell_height * 2);
+						break;
+					case 9:
+						break;
+					case 10:
+						break;
+					case 11:
+						break;
+					case 12:
+						break;
+					case 13:
+						break;
+					}
 					break;
 				case TILEKIND_COMMUNITYBUILDINS:
 					break;
@@ -1279,16 +1550,113 @@ void Simtown::DrawTile(int left, int top)
 			break;
 		case 6:
 			break;
-		default:
+		case 7:
+			break;
+		case 8:
+			break;
+		case 9:
+			break;
+		case 10:
+			break;
+		case 11:
+			break;
+		case 12:
+			break;
+		case 13:
 			break;
 		}
 
 		break; 
 	case TILEKIND_BUSINESSES:
+		switch (_currentTileNum)
+		{
+		case 0:
+			_tile._businesses[_currentTileNum][_tileSize]
+				->Render(GetMemDC(), left, top - cell_height + cell_height / 16,
+					cell_width,
+					cell_height * 2);
+			break;
+		case 1:
+			_tile._businesses[_currentTileNum][_tileSize]
+				->Render(GetMemDC(), left, top - cell_height + cell_height / 16,
+					cell_width,
+					cell_height * 2);
+			break;
+		case 2:
+			break;
+		case 3:
+			_tile._businesses[_currentTileNum][_tileSize]
+				->Render(GetMemDC(), left, top - cell_height,
+					cell_width,
+					cell_height * 2);
+			break;
+		case 4:
+			break;
+		case 5:
+			_tile._businesses[_currentTileNum][_tileSize]
+				->Render(GetMemDC(), left, top - cell_height + cell_height / 16,
+					cell_width,
+					cell_height * 2);
+			break;
+		case 6:
+			break;
+		case 7:
+			break;
+		case 8:
+			_tile._businesses[_currentTileNum][_tileSize]
+				->Render(GetMemDC(), left, top - cell_height + cell_height / 16,
+					cell_width,
+					cell_height * 2);
+			break;
+		case 9:
+			break;
+		case 10:
+			break;
+		case 11:
+			break;
+		case 12:
+			break;
+		case 13:
+			break;
+		}
 		break;
 	case TILEKIND_COMMUNITYBUILDINS:
+		switch (_currentTileNum)
+		{
+		case 0:
+			break;
+		case 1:
+			break;
+		case 2:
+			break;
+		case 3:
+			break;
+		case 4:
+			break;
+		case 5:
+			break;
+		case 6:
+			break;
+		}
 		break;
 	case TILEKIND_FUNPLACES:
+		switch (_currentTileNum)
+		{
+		case 0:
+			break;
+		case 1:
+			break;
+		case 2:
+			break;
+		case 3:
+			break;
+		case 4:
+			break;
+		case 5:
+			break;
+		case 6:
+			break;
+		}
 		break;
 	}
 }
