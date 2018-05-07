@@ -1966,6 +1966,7 @@ void Simtown::SaveTile()
 	// 구분점은 따로 없고 쭉 들어가므로 사이즈로 구분해서 읽어와야함
 	WriteFile(file, _tileMap,
 		sizeof(tagTile) * TILE_COUNT_X * TILE_COUNT_Y, &write, NULL);
+	WriteFile(file, &_population, sizeof(int), &write, NULL);
 
 	CloseHandle(file);
 }
@@ -1997,6 +1998,7 @@ void Simtown::LoadTile()
 	// 구분점은 따로 없고 쭉 들어가므로 사이즈로 구분해서 읽어와야함
 	ReadFile(file, _tileMap,
 		sizeof(tagTile) * TILE_COUNT_X * TILE_COUNT_Y, &read, NULL);
+	ReadFile(file, &_population, sizeof(int), &read, NULL);
 
 	CloseHandle(file);
 }
@@ -2012,6 +2014,7 @@ void Simtown::InitTile()
 			_tileMap[i][j].tileNum = -1;
 		}
 	}
+	_population = 0;
 }
 
 int Simtown::MakeRoad(int i, int j)
