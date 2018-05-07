@@ -209,7 +209,7 @@ void Simtown::Update()
 
 						if (!_tileMap[isoX][isoY].isSelected && _isClicked) {
 							_tileMap[isoX][isoY].isStartDraw = true;
-							SelectTile();
+								SelectTile();
 							if (_tileMap[isoX][isoY].isStartDraw)
 								SOUND->Play("tile_click");
 						}
@@ -634,6 +634,41 @@ void Simtown::FindTileImg()
 	_tile._fun_places[1][TILESIZE_SMALL] =
 		IMAGE->FindImage("fun_places_bowling_alley_small");
 
+	_tile._fun_places[6][TILESIZE_BIG] =
+		IMAGE->FindImage("fun_places_toy_store_big");
+	_tile._fun_places[6][TILESIZE_MID] =
+		IMAGE->FindImage("fun_places_toy_store_mid");
+	_tile._fun_places[6][TILESIZE_SMALL] =
+		IMAGE->FindImage("fun_places_toy_store_small");
+
+	_tile._community_buildings[0][TILESIZE_BIG] =
+		IMAGE->FindImage("community_buildings_post_office_big");
+	_tile._community_buildings[0][TILESIZE_MID] =
+		IMAGE->FindImage("community_buildings_post_office_mid");
+	_tile._community_buildings[0][TILESIZE_SMALL] =
+		IMAGE->FindImage("community_buildings_post_office_small");
+
+	_tile._community_buildings[1][TILESIZE_BIG] =
+		IMAGE->FindImage("community_buildings_medical_clinic_big");
+	_tile._community_buildings[1][TILESIZE_MID] =
+		IMAGE->FindImage("community_buildings_medical_clinic_mid");
+	_tile._community_buildings[1][TILESIZE_SMALL] =
+		IMAGE->FindImage("community_buildings_medical_clinic_small");
+
+	_tile._community_buildings[3][TILESIZE_BIG] =
+		IMAGE->FindImage("community_buildings_fire_station_big");
+	_tile._community_buildings[3][TILESIZE_MID] =
+		IMAGE->FindImage("community_buildings_fire_station_mid");
+	_tile._community_buildings[3][TILESIZE_SMALL] =
+		IMAGE->FindImage("community_buildings_fire_station_small");
+
+	_tile._community_buildings[5][TILESIZE_BIG] =
+		IMAGE->FindImage("community_buildings_library_big");
+	_tile._community_buildings[5][TILESIZE_MID] =
+		IMAGE->FindImage("community_buildings_library_mid");
+	_tile._community_buildings[5][TILESIZE_SMALL] =
+		IMAGE->FindImage("community_buildings_library_small");
+
 	_tile._tile[0][TILESIZE_BIG] =
 		IMAGE->FindImage("road_big");
 	_tile._tile[0][TILESIZE_MID] =
@@ -873,27 +908,8 @@ void Simtown::SelectTile()
 			break;
 		}
 		break;
-	case TILEKIND_COMMUNITYBUILDINS:
-		switch (_tileMap[_isoX][_isoY].tileNum)
-		{
-		case 0:
-			break;
-		case 1:
-			break;
-		case 2:
-			break;
-		case 3:
-			break;
-		case 4:
-			break;
-		case 5:
-			break;
-		case 6:
-			break;
-		}
-		break;
-	case TILEKIND_FUNPLACES:
-		switch (_tileMap[_isoX][_isoY].tileNum)
+	case TILEKIND_COMMUNITYBUILDINGS:
+		switch (_currentTileNum)
 		{
 		case 0:
 			if (_isoY - 1 < 0 ||
@@ -906,11 +922,43 @@ void Simtown::SelectTile()
 			_tileMap[_isoX][_isoY - 1].isSelected = true;
 			break;
 		case 1:
-			if (_tileMap[_isoX][_isoY - 1].isSelected) {
+			if (_isoY - 1 < 0 ||
+				_tileMap[_isoX][_isoY - 1].isSelected) {
 				_tileMap[_isoX][_isoY].isStartDraw = false;
 				return;
 			}
 
+			_tileMap[_isoX][_isoY].isSelected = true;
+			_tileMap[_isoX][_isoY - 1].isSelected = true;
+			break;
+		case 2:
+			break;
+		case 3:
+			_tileMap[_isoX][_isoY].isSelected = true;
+			break;
+		case 4:
+			break;
+		case 5:
+			_tileMap[_isoX][_isoY].isSelected = true;
+			break;
+		case 6:
+			break;
+		}
+		break;
+	case TILEKIND_FUNPLACES:
+		switch (_currentTileNum)
+		{
+		case 0:
+			if (_isoY - 1 < 0 ||
+				_tileMap[_isoX][_isoY - 1].isSelected) {
+				_tileMap[_isoX][_isoY].isStartDraw = false;
+				return;
+			}
+
+			_tileMap[_isoX][_isoY].isSelected = true;
+			_tileMap[_isoX][_isoY - 1].isSelected = true;
+			break;
+		case 1:
 			_tileMap[_isoX][_isoY].isSelected = true;
 			break;
 		case 2:
@@ -922,6 +970,14 @@ void Simtown::SelectTile()
 		case 5:
 			break;
 		case 6:
+			if (_isoX + 1 > TILE_COUNT_X ||
+				_tileMap[_isoX + 1][_isoY].isSelected) {
+				_tileMap[_isoX][_isoY].isStartDraw = false;
+				return;
+			}
+
+			_tileMap[_isoX][_isoY].isSelected = true;
+			_tileMap[_isoX + 1][_isoY].isSelected = true;
 			break;
 		}
 
@@ -1072,7 +1128,7 @@ void Simtown::DeleteTile()
 		}
 		break;
 	case TILEKIND_BUSINESSES:
-		switch (_currentTileNum)
+		switch (_tileMap[_isoX][_isoY].tileNum)
 		{
 		case 0:
 			if (_isoX + 1 > TILE_COUNT_X) {
@@ -1139,26 +1195,7 @@ void Simtown::DeleteTile()
 			break;
 		}
 		break;
-	case TILEKIND_COMMUNITYBUILDINS:
-		switch (_tileMap[_isoX][_isoY].tileNum)
-		{
-		case 0:
-			break;
-		case 1:
-			break;
-		case 2:
-			break;
-		case 3:
-			break;
-		case 4:
-			break;
-		case 5:
-			break;
-		case 6:
-			break;
-		}
-		break;
-	case TILEKIND_FUNPLACES:
+	case TILEKIND_COMMUNITYBUILDINGS:
 		switch (_tileMap[_isoX][_isoY].tileNum)
 		{
 		case 0:
@@ -1177,6 +1214,36 @@ void Simtown::DeleteTile()
 			}
 
 			_tileMap[_isoX][_isoY].isSelected = false;
+			_tileMap[_isoX][_isoY - 1].isSelected = false;
+			break;
+		case 2:
+			break;
+		case 3:
+			_tileMap[_isoX][_isoY].isSelected = false;
+			break;
+		case 4:
+			break;
+		case 5:
+			_tileMap[_isoX][_isoY].isSelected = false;
+			break;
+		case 6:
+			break;
+		}
+		break;
+	case TILEKIND_FUNPLACES:
+		switch (_tileMap[_isoX][_isoY].tileNum)
+		{
+		case 0:
+			if (_isoY - 1 < 0) {
+				_tileMap[_isoX][_isoY].isStartDraw = true;
+				return;
+			}
+
+			_tileMap[_isoX][_isoY].isSelected = false;
+			_tileMap[_isoX][_isoY - 1].isSelected = false;
+			break;
+		case 1:
+			_tileMap[_isoX][_isoY].isSelected = false;
 			break;
 		case 2:
 			break;
@@ -1187,6 +1254,13 @@ void Simtown::DeleteTile()
 		case 5:
 			break;
 		case 6:
+			if (_isoX + 1 > TILE_COUNT_X) {
+				_tileMap[_isoX][_isoY].isStartDraw = true;
+				return;
+			}
+
+			_tileMap[_isoX][_isoY].isSelected = false;
+			_tileMap[_isoX + 1][_isoY].isSelected = false;
 			break;
 		}
 		break;
@@ -1402,20 +1476,36 @@ void Simtown::DrawTileMap()
 						break;
 					}
 					break;
-				case TILEKIND_COMMUNITYBUILDINS:
+				case TILEKIND_COMMUNITYBUILDINGS:
 					switch (_tileMap[i][j].tileNum)
 					{
 					case 0:
+						_tile._community_buildings[_tileMap[i][j].tileNum][_tileSize]
+							->Render(GetMemDC(), left, top - cell_height,
+								cell_width + cell_width / 4,
+								cell_height * 2);
 						break;
 					case 1:
+						_tile._community_buildings[_tileMap[i][j].tileNum][_tileSize]
+							->Render(GetMemDC(), left, top - cell_height - cell_height / 8,
+								cell_width,
+								cell_height * 2);
 						break;
 					case 2:
 						break;
 					case 3:
+						_tile._community_buildings[_tileMap[i][j].tileNum][_tileSize]
+							->Render(GetMemDC(), left, top - cell_height,
+								cell_width,
+								cell_height * 2);
 						break;
 					case 4:
 						break;
 					case 5:
+						_tile._community_buildings[_tileMap[i][j].tileNum][_tileSize]
+							->Render(GetMemDC(), left, top - cell_height,
+								cell_width,
+								cell_height * 2);
 						break;
 					case 6:
 						break;
@@ -1445,6 +1535,10 @@ void Simtown::DrawTileMap()
 					case 5:
 						break;
 					case 6:
+						_tile._fun_places[_tileMap[i][j].tileNum][_tileSize]
+							->Render(GetMemDC(), left, top - cell_height + cell_height / 16,
+								cell_width,
+								cell_height * 2);
 						break;
 					}
 
@@ -1775,21 +1869,36 @@ void Simtown::DrawTile(int left, int top)
 			break;
 		}
 		break;
-	case TILEKIND_COMMUNITYBUILDINS:
+	case TILEKIND_COMMUNITYBUILDINGS:
 		switch (_currentTileNum)
 		{
 		case 0:
-
+			_tile._community_buildings[_currentTileNum][_tileSize]
+				->Render(GetMemDC(), left, top - cell_height,
+					cell_width + cell_width / 4,
+					cell_height * 2);
 			break;
 		case 1:
+			_tile._community_buildings[_currentTileNum][_tileSize]
+				->Render(GetMemDC(), left, top - cell_height - cell_height / 8,
+					cell_width,
+					cell_height * 2);
 			break;
 		case 2:
 			break;
 		case 3:
+			_tile._community_buildings[_currentTileNum][_tileSize]
+				->Render(GetMemDC(), left, top - cell_height,
+					cell_width,
+					cell_height * 2);
 			break;
 		case 4:
 			break;
 		case 5:
+			_tile._community_buildings[_currentTileNum][_tileSize]
+				->Render(GetMemDC(), left, top - cell_height,
+					cell_width,
+					cell_height * 2);
 			break;
 		case 6:
 			break;
@@ -1819,6 +1928,10 @@ void Simtown::DrawTile(int left, int top)
 		case 5:
 			break;
 		case 6:
+			_tile._fun_places[_currentTileNum][_tileSize]
+				->Render(GetMemDC(), left, top - cell_height + cell_height / 16,
+					cell_width,
+					cell_height * 2);
 			break;
 		}
 		break;

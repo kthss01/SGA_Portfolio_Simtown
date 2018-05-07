@@ -53,6 +53,7 @@ struct tagTileInfo {
 	Image * _houses[14][TILESIZE_END];
 	Image * _businesses[14][3];
 	Image * _fun_places[7][3];
+	Image * _community_buildings[7][3];
 };
 
 enum TileKind {
@@ -60,7 +61,7 @@ enum TileKind {
 	TILEKIND_HOUSES,
 	TILEKIND_BUSINESSES,
 	TILEKIND_FUNPLACES,
-	TILEKIND_COMMUNITYBUILDINS,
+	TILEKIND_COMMUNITYBUILDINGS,
 };
 
 class Simtown : public GameNode

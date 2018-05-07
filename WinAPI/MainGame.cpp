@@ -200,6 +200,45 @@ void MainGame::LoadHouses()
 
 void MainGame::LoadCommunityBuildings()
 {
+	IMAGE->AddImage("community_buildings_post_office_big",
+		"images/community buildings/big/post_office.bmp", 0, 0,
+		CELL_WIDTH + 50, CELL_HEIGHT * 2, true, RGB(255, 0, 255));
+	IMAGE->AddImage("community_buildings_post_office_mid",
+		"images/community buildings/mid/post_office.bmp", 0, 0,
+		CELL_WIDTH / 2 + 25, CELL_HEIGHT, true, RGB(255, 0, 255));
+	IMAGE->AddImage("community_buildings_post_office_small",
+		"images/community buildings/small/post_office.bmp", 0, 0,
+		CELL_WIDTH / 4 + 12.5, CELL_HEIGHT / 2, true, RGB(255, 0, 255));
+
+	IMAGE->AddImage("community_buildings_medical_clinic_big",
+		"images/community buildings/big/medical_clinic.bmp", 0, 0,
+		CELL_WIDTH, CELL_HEIGHT * 2, true, RGB(255, 0, 255));
+	IMAGE->AddImage("community_buildings_medical_clinic_mid",
+		"images/community buildings/mid/medical_clinic.bmp", 0, 0,
+		CELL_WIDTH / 2, CELL_HEIGHT, true, RGB(255, 0, 255));
+	IMAGE->AddImage("community_buildings_medical_clinic_small",
+		"images/community buildings/small/medical_clinic.bmp", 0, 0,
+		CELL_WIDTH / 4, CELL_HEIGHT / 2, true, RGB(255, 0, 255));
+
+	IMAGE->AddImage("community_buildings_fire_station_big",
+		"images/community buildings/big/fire_station.bmp", 0, 0,
+		CELL_WIDTH, CELL_HEIGHT * 2, true, RGB(255, 0, 255));
+	IMAGE->AddImage("community_buildings_fire_station_mid",
+		"images/community buildings/mid/fire_station.bmp", 0, 0,
+		CELL_WIDTH / 2, CELL_HEIGHT, true, RGB(255, 0, 255));
+	IMAGE->AddImage("community_buildings_fire_station_small",
+		"images/community buildings/small/fire_station.bmp", 0, 0,
+		CELL_WIDTH / 4, CELL_HEIGHT / 2, true, RGB(255, 0, 255));
+
+	IMAGE->AddImage("community_buildings_library_big",
+		"images/community buildings/big/library.bmp", 0, 0,
+		CELL_WIDTH, CELL_HEIGHT * 2, true, RGB(255, 0, 255));
+	IMAGE->AddImage("community_buildings_library_mid",
+		"images/community buildings/mid/library.bmp", 0, 0,
+		CELL_WIDTH / 2, CELL_HEIGHT, true, RGB(255, 0, 255));
+	IMAGE->AddImage("community_buildings_library_small",
+		"images/community buildings/small/library.bmp", 0, 0,
+		CELL_WIDTH / 4, CELL_HEIGHT / 2, true, RGB(255, 0, 255));
 }
 
 void MainGame::LoadBusinesses()
@@ -276,6 +315,16 @@ void MainGame::LoadFunPlaces()
 		CELL_WIDTH / 2, CELL_HEIGHT, true, RGB(255, 0, 255));
 	IMAGE->AddImage("fun_places_bowling_alley_small",
 		"images/fun places/small/bowling_alley.bmp", 0, 0,
+		CELL_WIDTH / 4, CELL_HEIGHT / 2, true, RGB(255, 0, 255));
+
+	IMAGE->AddImage("fun_places_toy_store_big",
+		"images/fun places/big/toy_store.bmp", 0, 0,
+		CELL_WIDTH, CELL_HEIGHT * 2, true, RGB(255, 0, 255));
+	IMAGE->AddImage("fun_places_toy_store_mid",
+		"images/fun places/mid/toy_store.bmp", 0, 0,
+		CELL_WIDTH / 2, CELL_HEIGHT, true, RGB(255, 0, 255));
+	IMAGE->AddImage("fun_places_toy_store_small",
+		"images/fun places/small/toy_store.bmp", 0, 0,
 		CELL_WIDTH / 4, CELL_HEIGHT / 2, true, RGB(255, 0, 255));
 }
 
