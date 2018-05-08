@@ -2272,21 +2272,21 @@ void Simtown::PlaySong(int num)
 		if (SOUND->IsPlaySound("song3")) SOUND->Stop("song3");
 		if (SOUND->IsPlaySound("song1")) SOUND->Stop("song1");
 		else
-			SOUND->Play("song1", 0.75f);
+			SOUND->Play("song1", 1.0f);
 		break;
 	case 1:
 		if (SOUND->IsPlaySound("song1")) SOUND->Stop("song1");
 		if (SOUND->IsPlaySound("song3")) SOUND->Stop("song3");
 		if (SOUND->IsPlaySound("song2")) SOUND->Stop("song2");
 		else
-			SOUND->Play("song2", 0.75f);
+			SOUND->Play("song2", 1.0f);
 		break;
 	case 2:
 		if (SOUND->IsPlaySound("song1")) SOUND->Stop("song1");
 		if (SOUND->IsPlaySound("song2")) SOUND->Stop("song2");
 		if (SOUND->IsPlaySound("song3")) SOUND->Stop("song3");
 		else
-			SOUND->Play("song3", 0.75f);
+			SOUND->Play("song3", 1.0f);
 		break;
 	}
 }
